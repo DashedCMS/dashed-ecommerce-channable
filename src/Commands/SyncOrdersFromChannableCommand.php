@@ -5,6 +5,7 @@ namespace Qubiqx\QcommerceEcommerceChannable\Commands;
 use Illuminate\Console\Command;
 use Qubiqx\QcommerceCore\Models\Customsetting;
 use Qubiqx\QcommerceEcommerceChannable\Classes\Channable;
+use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
 
 class SyncOrdersFromChannableCommand extends Command
 {
@@ -40,7 +41,19 @@ class SyncOrdersFromChannableCommand extends Command
     public function handle()
     {
         if (Channable::isConnected() && Customsetting::get('channable_order_sync_enabled', null, 0)) {
-            Channable::saveNewOrders();
+            $orderDatas = Channable::getOrders();
+            foreach ($orderDatas as $orderData) {
+                $channableOrder = ChannableOrder::where('channable_id', $orderData['id'])->first();
+                if ($channableOrder && ! $channableOrder->order) {
+                    $channableOrder->delete();
+                    $channableOrder = null;
+                }
+
+                if (! $channableOrder) {
+                    $this->info('Handling order ' . $orderData['id']);
+                    Channable::saveNewOrder($orderData);
+                }
+            }
         }
     }
 }

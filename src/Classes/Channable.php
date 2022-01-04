@@ -69,43 +69,43 @@ class Channable
         return [];
     }
 
-    public static function saveNewOrders($siteId = null)
-    {
-        if (! $siteId) {
-            $siteId = Sites::getActive();
-        }
-
-        $orderDatas = self::getOrders();
-        foreach ($orderDatas as $orderData) {
-            $channableOrder = ChannableOrder::where('channable_id', $orderData['id'])->first();
-            if ($channableOrder && ! $channableOrder->order) {
-                $channableOrder->delete();
-                $channableOrder = null;
-            }
-
-            if (! $channableOrder) {
-                self::saveNewOrder($orderData, $siteId);
-            }
-        }
-
-//        $channableOrders = Order::whereNotNull('channable_order_connection_id')->get();
-//        foreach ($channableOrders as $channableOrder) {
-//            $orderStillExistsInChannable = false;
+//    public static function getAllOrders($siteId = null)
+//    {
+//        if (! $siteId) {
+//            $siteId = Sites::getActive();
+//        }
 //
-//            foreach ($orderDatas as $orderData) {
-//                if ($channableOrder->channableOrderConnection->channel_id == $orderData['channel_id']) {
-//                    $orderStillExistsInChannable = true;
-//                }
-//                if ($orderData['channel_id'] == 1230442136) {
-//                    dd($orderData);
-//                }
+//        $orderDatas = self::getOrders();
+//        foreach ($orderDatas as $orderData) {
+//            $channableOrder = ChannableOrder::where('channable_id', $orderData['id'])->first();
+//            if ($channableOrder && ! $channableOrder->order) {
+//                $channableOrder->delete();
+//                $channableOrder = null;
 //            }
 //
-//            if (!$orderStillExistsInChannable) {
-//                dd('kut', $channableOrder);
+//            if (! $channableOrder) {
+//                self::saveNewOrder($orderData, $siteId);
 //            }
 //        }
-    }
+//
+////        $channableOrders = Order::whereNotNull('channable_order_connection_id')->get();
+////        foreach ($channableOrders as $channableOrder) {
+////            $orderStillExistsInChannable = false;
+////
+////            foreach ($orderDatas as $orderData) {
+////                if ($channableOrder->channableOrderConnection->channel_id == $orderData['channel_id']) {
+////                    $orderStillExistsInChannable = true;
+////                }
+////                if ($orderData['channel_id'] == 1230442136) {
+////                    dd($orderData);
+////                }
+////            }
+////
+////            if (!$orderStillExistsInChannable) {
+////                dd('kut', $channableOrder);
+////            }
+////        }
+//    }
 
     public static function saveNewOrder($orderData, $siteId = null)
     {
