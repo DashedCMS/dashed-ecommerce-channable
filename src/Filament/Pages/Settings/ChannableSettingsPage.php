@@ -13,7 +13,6 @@ use Filament\Pages\Page;
 use Qubiqx\QcommerceCore\Classes\Sites;
 use Qubiqx\QcommerceCore\Models\Customsetting;
 use Qubiqx\QcommerceEcommerceChannable\Classes\Channable;
-use Qubiqx\QcommerceEcommerceEboekhouden\Classes\Eboekhouden;
 
 class ChannableSettingsPage extends Page implements HasForms
 {

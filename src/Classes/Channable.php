@@ -14,7 +14,7 @@ use Qubiqx\QcommerceEcommerceCore\Models\Product;
 
 class Channable
 {
-    const APIURL = 'https://api.channable.com/v1';
+    public const APIURL = 'https://api.channable.com/v1';
 
     public static function isConnected($siteId = null)
     {
@@ -36,6 +36,7 @@ class Channable
         } catch (\Exception $e) {
             return true;
         }
+
         return false;
     }
 
@@ -61,8 +62,10 @@ class Channable
                     $channableOffset += 100;
                 }
             }
+
             return $channableOrders;
         }
+
         return [];
     }
 
@@ -75,12 +78,12 @@ class Channable
         $orderDatas = self::getOrders();
         foreach ($orderDatas as $orderData) {
             $channableOrder = ChannableOrder::where('channable_id', $orderData['id'])->first();
-            if ($channableOrder && !$channableOrder->order) {
+            if ($channableOrder && ! $channableOrder->order) {
                 $channableOrder->delete();
                 $channableOrder = null;
             }
 
-            if (!$channableOrder) {
+            if (! $channableOrder) {
                 self::saveNewOrder($orderData, $siteId);
             }
         }
