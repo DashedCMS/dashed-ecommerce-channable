@@ -6,8 +6,6 @@ use Filament\PluginServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Qubiqx\QcommerceEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
 use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Qubiqx\QcommerceEcommerceChannable\Commands\QcommerceEcommerceChannableCommand;
 
 class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
 {
