@@ -4,7 +4,12 @@ namespace Qubiqx\QcommerceEcommerceChannable;
 
 use Filament\PluginServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
+use Qubiqx\QcommerceEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
+use Qubiqx\QcommerceEcommerceChannable\Commands\SyncStockFromChannableCommand;
 use Qubiqx\QcommerceEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
+use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
+use Qubiqx\QcommerceEcommerceCore\Models\Order;
+use Qubiqx\QcommerceEcommerceChannable\Filament\Widgets\ChannableOrderStats;
 use Spatie\LaravelPackageTools\Package;
 
 class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
@@ -15,14 +20,13 @@ class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
     {
         $this->app->booted(function () {
             $schedule = app(Schedule::class);
-//            $schedule->command(PushOrdersToEboekhoudenCommand::class)->everyFifteenMinutes();
+            $schedule->command(SyncOrdersFromChannableCommand::class)->everyFiveMinutes();
+            $schedule->command(SyncStockFromChannableCommand::class)->everyFiveMinutes();
         });
 
-//        Livewire::component('show-eboekhouden-order', ShowEboekhoudenShopOrder::class);
-
-//        Order::addDynamicRelation('eboekhoudenOrder', function (Order $model) {
-//            return $model->hasOne(EboekhoudenOrder::class);
-//        });
+        Order::addDynamicRelation('channableOrder', function (Order $model) {
+            return $model->hasOne(ChannableOrder::class);
+        });
     }
 
     public function configurePackage(Package $package): void
@@ -32,29 +36,21 @@ class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
         cms()->builder(
             'settingPages',
             array_merge(cms()->builder('settingPages'), [
-                'eboekhouden' => [
+                'channable' => [
                     'name' => 'Channable',
                     'description' => 'Koppel Channable',
                     'icon' => 'archive',
-                    'page' => EboekhoudenSettingsPage::class,
+                    'page' => ChannableSettingsPage::class,
                 ],
             ])
         );
-
-//        ecommerce()->builder(
-//            'orderSideWidgets',
-//            array_merge(ecommerce()->builder('orderSideWidgets'), [
-//                'show-eboekhouden-order' => [
-//                    'name' => 'show-eboekhouden-order',
-//                ],
-//            ])
-//        );
 
         $package
             ->name('qcommerce-ecommerce-channable')
             ->hasViews()
             ->hasCommands([
-//                PushOrdersToEboekhoudenCommand::class,
+                SyncOrdersFromChannableCommand::class,
+                SyncStockFromChannableCommand::class,
             ]);
     }
 
@@ -65,10 +61,10 @@ class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
         ]);
     }
 
-//    protected function getWidgets(): array
-//    {
-//        return array_merge(parent::getWidgets(), [
-//            EboekhoudenOrderStats::class,
-//        ]);
-//    }
+    protected function getWidgets(): array
+    {
+        return array_merge(parent::getWidgets(), [
+            ChannableOrderStats::class,
+        ]);
+    }
 }
