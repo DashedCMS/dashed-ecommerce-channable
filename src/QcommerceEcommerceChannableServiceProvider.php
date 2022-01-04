@@ -67,10 +67,10 @@ class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
         ]);
     }
 
-    protected function getWidgets(): array
-    {
+//    protected function getWidgets(): array
+//    {
 //        return array_merge(parent::getWidgets(), [
 //            EboekhoudenOrderStats::class,
 //        ]);
-    }
+//    }
 }
