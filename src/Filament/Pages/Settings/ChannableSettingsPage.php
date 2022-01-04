@@ -42,7 +42,6 @@ class ChannableSettingsPage extends Page implements HasForms
 
     protected function getFormSchema(): array
     {
-        Channable::saveNewOrders();
         $sites = Sites::getSites();
         $tabGroups = [];
 
