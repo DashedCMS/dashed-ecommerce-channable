@@ -170,7 +170,7 @@ class Channable
             $orderProduct->name = $thisProduct->name ?? $product['title'];
             $orderProduct->price = $product['price'] * $orderProduct->quantity;
             $orderProduct->discount = $product['discount'];
-            $orderProduct->sku = $thisProduct->sku;
+            $orderProduct->sku = $thisProduct->sku ?? '';
             $orderProduct->save();
         }
 
