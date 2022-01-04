@@ -88,23 +88,23 @@ class Channable
 //            }
 //        }
 //
-////        $channableOrders = Order::whereNotNull('channable_order_connection_id')->get();
-////        foreach ($channableOrders as $channableOrder) {
-////            $orderStillExistsInChannable = false;
-////
-////            foreach ($orderDatas as $orderData) {
-////                if ($channableOrder->channableOrderConnection->channel_id == $orderData['channel_id']) {
-////                    $orderStillExistsInChannable = true;
-////                }
-////                if ($orderData['channel_id'] == 1230442136) {
-////                    dd($orderData);
-////                }
-////            }
-////
-////            if (!$orderStillExistsInChannable) {
-////                dd('kut', $channableOrder);
-////            }
-////        }
+    ////        $channableOrders = Order::whereNotNull('channable_order_connection_id')->get();
+    ////        foreach ($channableOrders as $channableOrder) {
+    ////            $orderStillExistsInChannable = false;
+    ////
+    ////            foreach ($orderDatas as $orderData) {
+    ////                if ($channableOrder->channableOrderConnection->channel_id == $orderData['channel_id']) {
+    ////                    $orderStillExistsInChannable = true;
+    ////                }
+    ////                if ($orderData['channel_id'] == 1230442136) {
+    ////                    dd($orderData);
+    ////                }
+    ////            }
+    ////
+    ////            if (!$orderStillExistsInChannable) {
+    ////                dd('kut', $channableOrder);
+    ////            }
+    ////        }
 //    }
 
     public static function saveNewOrder($orderData, $siteId = null)
