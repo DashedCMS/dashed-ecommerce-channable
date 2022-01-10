@@ -25,16 +25,16 @@ class ChannableProductResource extends JsonResource
             'description' => $this->description,
             'ean' => $this->ean,
             'sku' => $this->sku,
-            'image_link' => $this->firstImageUrl,
+            'image_link' => glide($this->firstImageUrl, []),
         ];
 
         $imageCount = 1;
         $additionalImageLinks = '';
         foreach ($this->allImagesExceptFirst as $image) {
             if ($imageCount == 1) {
-                $additionalImageLinks .= url($image['image']);
+                $additionalImageLinks .= glide($image['image'], []);
             } else {
-                $additionalImageLinks .= ';' . url($image['image']);
+                $additionalImageLinks .= ';' . glide($image['image'], []);
             }
             $imageCount++;
         }
