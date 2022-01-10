@@ -48,6 +48,9 @@ class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
         $package
             ->name('qcommerce-ecommerce-channable')
             ->hasViews()
+            ->hasRoutes([
+                'channableRoutes'
+            ])
             ->hasCommands([
                 SyncOrdersFromChannableCommand::class,
                 SyncStockFromChannableCommand::class,
