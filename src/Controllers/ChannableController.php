@@ -4,10 +4,10 @@ namespace Qubiqx\QcommerceEcommerceChannable\Controllers;
 
 use Illuminate\Support\Facades\App;
 use Qubiqx\QcommerceCore\Classes\Locales;
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Qubiqx\QcommerceCore\Controllers\Frontend\FrontendController;
+use Qubiqx\QcommerceCore\Models\Customsetting;
 use Qubiqx\QcommerceEcommerceChannable\Resources\ChannableProductResource;
+use Qubiqx\QcommerceEcommerceCore\Models\Product;
 
 class ChannableController extends FrontendController
 {
