@@ -3,14 +3,14 @@
 namespace Qubiqx\QcommerceEcommerceChannable;
 
 use Filament\PluginServiceProvider;
-use Illuminate\Console\Scheduling\Schedule;
-use Qubiqx\QcommerceEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
-use Qubiqx\QcommerceEcommerceChannable\Commands\SyncStockFromChannableCommand;
-use Qubiqx\QcommerceEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
-use Qubiqx\QcommerceEcommerceChannable\Filament\Widgets\ChannableOrderStats;
-use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Spatie\LaravelPackageTools\Package;
+use Illuminate\Console\Scheduling\Schedule;
+use Qubiqx\QcommerceEcommerceCore\Models\Order;
+use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
+use Qubiqx\QcommerceEcommerceChannable\Filament\Widgets\ChannableOrderStats;
+use Qubiqx\QcommerceEcommerceChannable\Commands\SyncStockFromChannableCommand;
+use Qubiqx\QcommerceEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
+use Qubiqx\QcommerceEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
 
 class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
 {
