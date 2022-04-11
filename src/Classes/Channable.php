@@ -5,12 +5,12 @@ namespace Qubiqx\QcommerceEcommerceChannable\Classes;
 use Illuminate\Support\Facades\Http;
 use Qubiqx\QcommerceCore\Classes\Sites;
 use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
+use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderLog;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderPayment;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderProduct;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
+use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
 
 class Channable
 {

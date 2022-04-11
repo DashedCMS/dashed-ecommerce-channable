@@ -2,10 +2,11 @@
 
 namespace Qubiqx\QcommerceEcommerceChannable\Models;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Qubiqx\QcommerceEcommerceCore\Models\Order;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ChannableOrder extends Model
 {
@@ -36,6 +37,11 @@ class ChannableOrder extends Model
         'updated_at',
         'deleted_at',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
+    }
 
     public function order(): BelongsTo
     {
