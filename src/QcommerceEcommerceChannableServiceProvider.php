@@ -20,8 +20,8 @@ class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
     {
         $this->app->booted(function () {
             $schedule = app(Schedule::class);
-            $schedule->command(SyncOrdersFromChannableCommand::class)->everyFiveMinutes();
-            $schedule->command(SyncStockFromChannableCommand::class)->everyFiveMinutes();
+            $schedule->command(SyncOrdersFromChannableCommand::class)->everyFifteenMinutes();
+            $schedule->command(SyncStockFromChannableCommand::class)->everyFifteenMinutes();
         });
 
         Order::addDynamicRelation('channableOrder', function (Order $model) {
