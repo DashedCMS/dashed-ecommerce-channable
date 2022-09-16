@@ -18,7 +18,7 @@ class Channable
 
     public static function isConnected($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -42,7 +42,7 @@ class Channable
 
     public static function getOrders($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -109,7 +109,7 @@ class Channable
 
     public static function saveNewOrder($orderData, $siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -245,8 +245,10 @@ class Channable
                     ];
                 }
 
-                $response = Http::withToken($channableApiKey)->post(self::APIURL . '/companies/' . $channableCompanyId . '/projects/' . $channableProjectId . '/offers', $channableProducts);
-                $response = json_decode($response->body(), true);
+                $response = Http::withToken($channableApiKey)
+                    ->retry(3)
+                    ->post(self::APIURL . '/companies/' . $channableCompanyId . '/projects/' . $channableProjectId . '/offers', $channableProducts)
+                    ->json();
             });
         }
     }
