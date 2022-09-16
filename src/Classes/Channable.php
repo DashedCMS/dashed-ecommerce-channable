@@ -18,7 +18,7 @@ class Channable
 
     public static function isConnected($siteId = null)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -42,7 +42,7 @@ class Channable
 
     public static function getOrders($siteId = null)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -109,7 +109,7 @@ class Channable
 
     public static function saveNewOrder($orderData, $siteId = null)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
