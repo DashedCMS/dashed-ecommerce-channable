@@ -2,11 +2,11 @@
 
 namespace Qubiqx\QcommerceEcommerceChannable\Models;
 
-use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Qubiqx\QcommerceEcommerceCore\Models\Order;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class ChannableOrder extends Model
 {
