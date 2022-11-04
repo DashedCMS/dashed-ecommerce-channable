@@ -5,12 +5,12 @@ namespace Qubiqx\QcommerceEcommerceChannable\Classes;
 use Illuminate\Support\Facades\Http;
 use Qubiqx\QcommerceCore\Classes\Sites;
 use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
+use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderLog;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderPayment;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderProduct;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
+use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
 
 class Channable
 {
@@ -18,7 +18,7 @@ class Channable
 
     public static function isConnected($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -42,7 +42,7 @@ class Channable
 
     public static function getOrders($siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -54,8 +54,10 @@ class Channable
             $channableOrdersResultCount = 100;
             $channableOffset = 0;
             while ($channableOrdersResultCount == 100) {
-                $response = Http::withToken($channableApiKey)->get(self::APIURL . '/companies/' . $channableCompanyId . '/projects/' . $channableProjectId . '/orders?limit=100&offset=' . $channableOffset);
-                $response = json_decode($response->body(), true);
+                $response = Http::withToken($channableApiKey)
+                    ->retry(3)
+                    ->get(self::APIURL . '/companies/' . $channableCompanyId . '/projects/' . $channableProjectId . '/orders?limit=100&offset=' . $channableOffset)
+                    ->json();
                 if (isset($response['orders'])) {
                     $channableOrders = array_merge($channableOrders, $response['orders']);
                     $channableOrdersResultCount = count($response['orders']);
@@ -109,7 +111,7 @@ class Channable
 
     public static function saveNewOrder($orderData, $siteId = null)
     {
-        if (! $siteId) {
+        if (!$siteId) {
             $siteId = Sites::getActive();
         }
 
