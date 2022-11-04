@@ -5,12 +5,12 @@ namespace Qubiqx\QcommerceEcommerceChannable\Classes;
 use Illuminate\Support\Facades\Http;
 use Qubiqx\QcommerceCore\Classes\Sites;
 use Qubiqx\QcommerceCore\Models\Customsetting;
+use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
 use Qubiqx\QcommerceEcommerceCore\Models\Order;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderLog;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderPayment;
 use Qubiqx\QcommerceEcommerceCore\Models\OrderProduct;
-use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
+use Qubiqx\QcommerceEcommerceCore\Models\Product;
 
 class Channable
 {
@@ -18,7 +18,7 @@ class Channable
 
     public static function isConnected($siteId = null)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -42,7 +42,7 @@ class Channable
 
     public static function getOrders($siteId = null)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
@@ -111,7 +111,7 @@ class Channable
 
     public static function saveNewOrder($orderData, $siteId = null)
     {
-        if (!$siteId) {
+        if (! $siteId) {
             $siteId = Sites::getActive();
         }
 
