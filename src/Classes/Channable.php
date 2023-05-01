@@ -248,12 +248,12 @@ class Channable
                     ];
                 }
 
-                try{
+                try {
                     $response = Http::withToken($channableApiKey)
                         ->retry(5, 5000)
                         ->post(self::APIURL . '/companies/' . $channableCompanyId . '/projects/' . $channableProjectId . '/offers', $channableProducts)
                         ->json();
-                }catch (Exception $exception){
+                } catch (Exception $exception) {
                     $response = null;
                 }
             });
