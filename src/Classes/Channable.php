@@ -2,6 +2,7 @@
 
 namespace Qubiqx\QcommerceEcommerceChannable\Classes;
 
+use Exception;
 use Illuminate\Support\Facades\Http;
 use Qubiqx\QcommerceCore\Classes\Sites;
 use Qubiqx\QcommerceCore\Models\Customsetting;
@@ -247,10 +248,14 @@ class Channable
                     ];
                 }
 
-                $response = Http::withToken($channableApiKey)
-                    ->retry(3)
-                    ->post(self::APIURL . '/companies/' . $channableCompanyId . '/projects/' . $channableProjectId . '/offers', $channableProducts)
-                    ->json();
+                try{
+                    $response = Http::withToken($channableApiKey)
+                        ->retry(5, 5000)
+                        ->post(self::APIURL . '/companies/' . $channableCompanyId . '/projects/' . $channableProjectId . '/offers', $channableProducts)
+                        ->json();
+                }catch (Exception $exception){
+                    $response = null;
+                }
             });
         }
     }
