@@ -4,6 +4,7 @@ namespace Qubiqx\QcommerceEcommerceChannable;
 
 use Filament\PluginServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
+use Qubiqx\QcommerceEcommerceChannable\Commands\CreateJSONFeedsCommand;
 use Qubiqx\QcommerceEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
 use Qubiqx\QcommerceEcommerceChannable\Commands\SyncStockFromChannableCommand;
 use Qubiqx\QcommerceEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
@@ -22,6 +23,7 @@ class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
             $schedule = app(Schedule::class);
             $schedule->command(SyncOrdersFromChannableCommand::class)->everyFifteenMinutes();
             $schedule->command(SyncStockFromChannableCommand::class)->everyFifteenMinutes();
+            $schedule->command(CreateJSONFeedsCommand::class)->everyFifteenMinutes();
         });
 
         Order::addDynamicRelation('channableOrder', function (Order $model) {
