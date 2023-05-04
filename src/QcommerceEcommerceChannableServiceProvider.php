@@ -3,6 +3,7 @@
 namespace Qubiqx\QcommerceEcommerceChannable;
 
 use Filament\PluginServiceProvider;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Console\Scheduling\Schedule;
 use Qubiqx\QcommerceEcommerceChannable\Commands\CreateJSONFeedsCommand;
 use Qubiqx\QcommerceEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
@@ -54,6 +55,7 @@ class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
                 'channableRoutes',
             ])
             ->hasCommands([
+                CreateJSONFeedsCommand::class,
                 SyncOrdersFromChannableCommand::class,
                 SyncStockFromChannableCommand::class,
             ]);

@@ -47,7 +47,7 @@ class CreateJSONFeedsCommand extends Command
 
             $json = json_encode(ChannableProductResource::collection(Product::publicShowable()->get()));
 
-            Storage::put('/channable-feeds/', 'channable-feed-' . $locale['id'] . '.json', $json);
+            Storage::disk('qcommerce')->put('/channable-feeds/channable-feed-' . $locale['id'] . '.json', $json);
         }
     }
 }
