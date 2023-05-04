@@ -6,9 +6,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
 use Qubiqx\QcommerceCore\Classes\Locales;
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceChannable\Classes\Channable;
-use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
 use Qubiqx\QcommerceEcommerceChannable\Resources\ChannableProductResource;
 use Qubiqx\QcommerceEcommerceCore\Models\Product;
 
