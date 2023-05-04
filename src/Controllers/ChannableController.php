@@ -17,7 +17,8 @@ class ChannableController extends FrontendController
             $locale = Locales::getLocale($locale);
             App::setLocale($locale['id']);
 
-            return json_encode(ChannableProductResource::collection(Product::publicShowable()->limit(100)->get()));
+            return json_encode(ChannableProductResource::collection(Product::publicShowable()->get()));
+//            return json_encode(ChannableProductResource::collection(Product::publicShowable()->limit(100)->get()));
         } else {
             return json_encode([]);
         }
