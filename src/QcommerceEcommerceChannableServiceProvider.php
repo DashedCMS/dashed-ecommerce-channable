@@ -3,7 +3,6 @@
 namespace Qubiqx\QcommerceEcommerceChannable;
 
 use Filament\PluginServiceProvider;
-use GuzzleHttp\Promise\Create;
 use Illuminate\Console\Scheduling\Schedule;
 use Qubiqx\QcommerceEcommerceChannable\Commands\CreateJSONFeedsCommand;
 use Qubiqx\QcommerceEcommerceChannable\Commands\SyncOrdersFromChannableCommand;

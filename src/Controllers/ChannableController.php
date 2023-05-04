@@ -19,6 +19,7 @@ class ChannableController extends FrontendController
             App::setLocale($locale['id']);
 
             return Storage::disk('qcommerce')->get('/channable-feeds/channable-feed-' . $locale['id'] . '.json');
+
             return json_encode(ChannableProductResource::collection(Product::publicShowable()->get()));
         //            return json_encode(ChannableProductResource::collection(Product::publicShowable()->limit(100)->get()));
         } else {
