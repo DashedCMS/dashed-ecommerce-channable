@@ -72,25 +72,25 @@ class Channable
         return [];
     }
 
-//    public static function getAllOrders($siteId = null)
-//    {
-//        if (! $siteId) {
-//            $siteId = Sites::getActive();
-//        }
-//
-//        $orderDatas = self::getOrders();
-//        foreach ($orderDatas as $orderData) {
-//            $channableOrder = ChannableOrder::where('channable_id', $orderData['id'])->first();
-//            if ($channableOrder && ! $channableOrder->order) {
-//                $channableOrder->delete();
-//                $channableOrder = null;
-//            }
-//
-//            if (! $channableOrder) {
-//                self::saveNewOrder($orderData, $siteId);
-//            }
-//        }
-//
+    //    public static function getAllOrders($siteId = null)
+    //    {
+    //        if (! $siteId) {
+    //            $siteId = Sites::getActive();
+    //        }
+    //
+    //        $orderDatas = self::getOrders();
+    //        foreach ($orderDatas as $orderData) {
+    //            $channableOrder = ChannableOrder::where('channable_id', $orderData['id'])->first();
+    //            if ($channableOrder && ! $channableOrder->order) {
+    //                $channableOrder->delete();
+    //                $channableOrder = null;
+    //            }
+    //
+    //            if (! $channableOrder) {
+    //                self::saveNewOrder($orderData, $siteId);
+    //            }
+    //        }
+    //
     ////        $channableOrders = Order::whereNotNull('channable_order_connection_id')->get();
     ////        foreach ($channableOrders as $channableOrder) {
     ////            $orderStillExistsInChannable = false;
@@ -108,7 +108,7 @@ class Channable
     ////                dd('kut', $channableOrder);
     ////            }
     ////        }
-//    }
+    //    }
 
     public static function saveNewOrder($orderData, $siteId = null)
     {
