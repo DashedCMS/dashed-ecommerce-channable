@@ -13,18 +13,18 @@ class UpgradeChannableToV2 extends Migration
      */
     public function up()
     {
-        Schema::rename('qcommerce__channable_order_connection', 'qcommerce__order_channable');
+        Schema::rename('dashed__channable_order_connection', 'dashed__order_channable');
 
-        Schema::table('qcommerce__order_channable', function (Blueprint $table) {
-            $table->foreignId('order_id')->nullable()->after('id')->constrained('qcommerce__orders');
+        Schema::table('dashed__order_channable', function (Blueprint $table) {
+            $table->foreignId('order_id')->nullable()->after('id')->constrained('dashed__orders');
         });
 
-        foreach (\Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder::get() as $channableOrder) {
-            $channableOrder->order_id = \Qubiqx\QcommerceEcommerceCore\Models\Order::where('channable_order_connection_id', $channableOrder->id)->first()->id;
+        foreach (\Dashed\DashedEcommerceChannable\Models\ChannableOrder::get() as $channableOrder) {
+            $channableOrder->order_id = \Dashed\DashedEcommerceCore\Models\Order::where('channable_order_connection_id', $channableOrder->id)->first()->id;
             $channableOrder->save();
         }
 
-        Schema::table('qcommerce__orders', function (Blueprint $table) {
+        Schema::table('dashed__orders', function (Blueprint $table) {
             $table->dropConstrainedForeignId('channable_order_connection_id');
         });
     }

@@ -1,17 +1,17 @@
 {
-    "name": "qubiqx/qcommerce-ecommerce-channable",
-    "description": "This is my package qcommerce-ecommerce-channable",
+    "name": "dashed/dashed-ecommerce-channable",
+    "description": "This is my package dashed-ecommerce-channable",
     "keywords": [
-        "Qubiqx",
+        "Dashed",
         "laravel",
-        "qcommerce-ecommerce-channable"
+        "dashed-ecommerce-channable"
     ],
-    "homepage": "https://github.com/qubiqx/qcommerce-ecommerce-channable",
+    "homepage": "https://github.com/Dashed-DEV/dashed-ecommerce-channable",
     "license": "MIT",
     "authors": [
         {
             "name": "Robin van Maasakker",
-            "email": "robin@qubiqx.com",
+            "email": "robin@dashed.nl",
             "role": "Developer"
         }
     ],
@@ -29,13 +29,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Qubiqx\\QcommerceEcommerceChannable\\": "src",
-            "Qubiqx\\QcommerceEcommerceChannable\\Database\\Factories\\": "database/factories"
+            "Dashed\\DashedEcommerceChannable\\": "src",
+            "Dashed\\DashedEcommerceChannable\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Qubiqx\\QcommerceEcommerceChannable\\Tests\\": "tests"
+            "Dashed\\DashedEcommerceChannable\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -52,10 +52,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Qubiqx\\QcommerceEcommerceChannable\\QcommerceEcommerceChannableServiceProvider"
+                "Dashed\\DashedEcommerceChannable\\DashedEcommerceChannableServiceProvider"
             ],
             "aliases": {
-                "QcommerceEcommerceChannable": "Qubiqx\\QcommerceEcommerceChannable\\Facades\\QcommerceEcommerceChannable"
+                "DashedEcommerceChannable": "Dashed\\DashedEcommerceChannable\\Facades\\DashedEcommerceChannable"
             }
         }
     },

@@ -1,6 +1,6 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceChannable\Filament\Pages\Settings;
+namespace Dashed\DashedEcommerceChannable\Filament\Pages\Settings;
 
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Tabs;
@@ -10,9 +10,9 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
-use Qubiqx\QcommerceCore\Classes\Sites;
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceChannable\Classes\Channable;
+use Dashed\DashedCore\Classes\Sites;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceChannable\Classes\Channable;
 
 class ChannableSettingsPage extends Page implements HasForms
 {
@@ -21,7 +21,7 @@ class ChannableSettingsPage extends Page implements HasForms
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'Channable';
 
-    protected static string $view = 'qcommerce-core::settings.pages.default-settings';
+    protected static string $view = 'dashed-core::settings.pages.default-settings';
 
     public function mount(): void
     {

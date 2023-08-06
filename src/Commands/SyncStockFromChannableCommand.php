@@ -1,10 +1,10 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceChannable\Commands;
+namespace Dashed\DashedEcommerceChannable\Commands;
 
 use Illuminate\Console\Command;
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceChannable\Classes\Channable;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceChannable\Classes\Channable;
 
 class SyncStockFromChannableCommand extends Command
 {

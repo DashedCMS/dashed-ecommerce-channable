@@ -13,7 +13,7 @@ class AddChannableOrderInformationToOrders extends Migration
      */
     public function up()
     {
-        Schema::create('qcommerce__channable_order_connection', function (Blueprint $table) {
+        Schema::create('dashed__channable_order_connection', function (Blueprint $table) {
             $table->id();
 
             $table->string('channable_id')->nullable();
@@ -33,9 +33,9 @@ class AddChannableOrderInformationToOrders extends Migration
             $table->timestamps();
         });
 
-        Schema::table('qcommerce__orders', function (Blueprint $table) {
+        Schema::table('dashed__orders', function (Blueprint $table) {
             $table->unsignedBigInteger('channable_order_connection_id')->nullable();
-            $table->foreign('channable_order_connection_id')->references('id')->on('qcommerce__channable_order_connection');
+            $table->foreign('channable_order_connection_id')->references('id')->on('dashed__channable_order_connection');
         });
     }
 

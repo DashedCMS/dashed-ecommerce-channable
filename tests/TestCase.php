@@ -1,10 +1,10 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceChannable\Tests;
+namespace Dashed\DashedEcommerceChannable\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Qubiqx\QcommerceEcommerceChannable\QcommerceEcommerceChannableServiceProvider;
+use Dashed\DashedEcommerceChannable\DashedEcommerceChannableServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -13,14 +13,14 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Qubiqx\\QcommerceEcommerceChannable\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Dashed\\DashedEcommerceChannable\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            QcommerceEcommerceChannableServiceProvider::class,
+            DashedEcommerceChannableServiceProvider::class,
         ];
     }
 
@@ -29,7 +29,7 @@ class TestCase extends Orchestra
         config()->set('database.default', 'testing');
 
         /*
-        $migration = include __DIR__.'/../database/migrations/create_qcommerce-ecommerce-channable_table.php.stub';
+        $migration = include __DIR__.'/../database/migrations/create_dashed-ecommerce-channable_table.php.stub';
         $migration->up();
         */
     }

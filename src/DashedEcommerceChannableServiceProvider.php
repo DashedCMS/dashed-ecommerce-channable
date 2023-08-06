@@ -1,21 +1,21 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceChannable;
+namespace Dashed\DashedEcommerceChannable;
 
 use Filament\PluginServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
-use Qubiqx\QcommerceEcommerceChannable\Commands\CreateJSONFeedsCommand;
-use Qubiqx\QcommerceEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
-use Qubiqx\QcommerceEcommerceChannable\Commands\SyncStockFromChannableCommand;
-use Qubiqx\QcommerceEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
-use Qubiqx\QcommerceEcommerceChannable\Filament\Widgets\ChannableOrderStats;
-use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
+use Dashed\DashedEcommerceChannable\Commands\CreateJSONFeedsCommand;
+use Dashed\DashedEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
+use Dashed\DashedEcommerceChannable\Commands\SyncStockFromChannableCommand;
+use Dashed\DashedEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
+use Dashed\DashedEcommerceChannable\Filament\Widgets\ChannableOrderStats;
+use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
+use Dashed\DashedEcommerceCore\Models\Order;
 use Spatie\LaravelPackageTools\Package;
 
-class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
+class DashedEcommerceChannableServiceProvider extends PluginServiceProvider
 {
-    public static string $name = 'qcommerce-ecommerce-channable';
+    public static string $name = 'dashed-ecommerce-channable';
 
     public function bootingPackage()
     {
@@ -48,7 +48,7 @@ class QcommerceEcommerceChannableServiceProvider extends PluginServiceProvider
         );
 
         $package
-            ->name('qcommerce-ecommerce-channable')
+            ->name('dashed-ecommerce-channable')
             ->hasViews()
             ->hasRoutes([
                 'channableRoutes',

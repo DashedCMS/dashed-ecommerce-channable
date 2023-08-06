@@ -1,17 +1,17 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceChannable\Classes;
+namespace Dashed\DashedEcommerceChannable\Classes;
 
 use Exception;
 use Illuminate\Support\Facades\Http;
-use Qubiqx\QcommerceCore\Classes\Sites;
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
-use Qubiqx\QcommerceEcommerceCore\Models\OrderLog;
-use Qubiqx\QcommerceEcommerceCore\Models\OrderPayment;
-use Qubiqx\QcommerceEcommerceCore\Models\OrderProduct;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
+use Dashed\DashedCore\Classes\Sites;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
+use Dashed\DashedEcommerceCore\Models\Order;
+use Dashed\DashedEcommerceCore\Models\OrderLog;
+use Dashed\DashedEcommerceCore\Models\OrderPayment;
+use Dashed\DashedEcommerceCore\Models\OrderProduct;
+use Dashed\DashedEcommerceCore\Models\Product;
 
 class Channable
 {

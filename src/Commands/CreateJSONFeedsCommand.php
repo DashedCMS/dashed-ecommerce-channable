@@ -1,13 +1,13 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceChannable\Commands;
+namespace Dashed\DashedEcommerceChannable\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
-use Qubiqx\QcommerceCore\Classes\Locales;
-use Qubiqx\QcommerceEcommerceChannable\Resources\ChannableProductResource;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
+use Dashed\DashedCore\Classes\Locales;
+use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
+use Dashed\DashedEcommerceCore\Models\Product;
 
 class CreateJSONFeedsCommand extends Command
 {
@@ -47,7 +47,7 @@ class CreateJSONFeedsCommand extends Command
 
             $json = json_encode(ChannableProductResource::collection(Product::publicShowable()->get()));
 
-            Storage::disk('qcommerce')->put('/channable-feeds/channable-feed-' . $locale['id'] . '.json', $json);
+            Storage::disk('dashed')->put('/channable-feeds/channable-feed-' . $locale['id'] . '.json', $json);
         }
     }
 }

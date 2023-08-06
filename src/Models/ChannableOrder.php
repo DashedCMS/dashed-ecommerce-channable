@@ -1,10 +1,10 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceChannable\Models;
+namespace Dashed\DashedEcommerceChannable\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Qubiqx\QcommerceEcommerceCore\Models\Order;
+use Dashed\DashedEcommerceCore\Models\Order;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -14,7 +14,7 @@ class ChannableOrder extends Model
 
     protected static $logFillable = true;
 
-    protected $table = 'qcommerce__order_channable';
+    protected $table = 'dashed__order_channable';
     protected $fillable = [
         'order_id',
         'channable_id',

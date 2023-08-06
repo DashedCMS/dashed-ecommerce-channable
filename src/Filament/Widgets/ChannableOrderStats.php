@@ -1,10 +1,10 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceChannable\Filament\Widgets;
+namespace Dashed\DashedEcommerceChannable\Filament\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
-use Qubiqx\QcommerceEcommerceChannable\Models\ChannableOrder;
+use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
 
 class ChannableOrderStats extends StatsOverviewWidget
 {

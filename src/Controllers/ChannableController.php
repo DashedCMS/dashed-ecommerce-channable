@@ -1,14 +1,14 @@
 <?php
 
-namespace Qubiqx\QcommerceEcommerceChannable\Controllers;
+namespace Dashed\DashedEcommerceChannable\Controllers;
 
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
-use Qubiqx\QcommerceCore\Classes\Locales;
-use Qubiqx\QcommerceCore\Controllers\Frontend\FrontendController;
-use Qubiqx\QcommerceCore\Models\Customsetting;
-use Qubiqx\QcommerceEcommerceChannable\Resources\ChannableProductResource;
-use Qubiqx\QcommerceEcommerceCore\Models\Product;
+use Dashed\DashedCore\Classes\Locales;
+use Dashed\DashedCore\Controllers\Frontend\FrontendController;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
+use Dashed\DashedEcommerceCore\Models\Product;
 
 class ChannableController extends FrontendController
 {
@@ -18,7 +18,7 @@ class ChannableController extends FrontendController
             $locale = Locales::getLocale($locale);
             App::setLocale($locale['id']);
 
-            return Storage::disk('qcommerce')->get('/channable-feeds/channable-feed-' . $locale['id'] . '.json');
+            return Storage::disk('dashed')->get('/channable-feeds/channable-feed-' . $locale['id'] . '.json');
 
             return json_encode(ChannableProductResource::collection(Product::publicShowable()->get()));
             //            return json_encode(ChannableProductResource::collection(Product::publicShowable()->limit(100)->get()));
