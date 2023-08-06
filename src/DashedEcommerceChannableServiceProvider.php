@@ -2,8 +2,6 @@
 
 namespace Dashed\DashedEcommerceChannable;
 
-use Filament\PluginServiceProvider;
-use Illuminate\Console\Scheduling\Schedule;
 use Dashed\DashedEcommerceChannable\Commands\CreateJSONFeedsCommand;
 use Dashed\DashedEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
 use Dashed\DashedEcommerceChannable\Commands\SyncStockFromChannableCommand;
@@ -11,6 +9,8 @@ use Dashed\DashedEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPag
 use Dashed\DashedEcommerceChannable\Filament\Widgets\ChannableOrderStats;
 use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
 use Dashed\DashedEcommerceCore\Models\Order;
+use Filament\PluginServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
 use Spatie\LaravelPackageTools\Package;
 
 class DashedEcommerceChannableServiceProvider extends PluginServiceProvider

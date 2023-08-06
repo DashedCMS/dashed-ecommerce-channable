@@ -2,9 +2,9 @@
 
 namespace Dashed\DashedEcommerceChannable\Tests;
 
+use Dashed\DashedEcommerceChannable\DashedEcommerceChannableServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Dashed\DashedEcommerceChannable\DashedEcommerceChannableServiceProvider;
 
 class TestCase extends Orchestra
 {

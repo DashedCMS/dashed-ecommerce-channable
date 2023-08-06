@@ -2,9 +2,9 @@
 
 namespace Dashed\DashedEcommerceChannable\Models;
 
+use Dashed\DashedEcommerceCore\Models\Order;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Dashed\DashedEcommerceCore\Models\Order;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
