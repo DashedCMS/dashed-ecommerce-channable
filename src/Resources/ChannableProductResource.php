@@ -26,7 +26,7 @@ class ChannableProductResource extends JsonResource
             'ean' => $this->ean,
             'sku' => $this->sku,
             'image_link' => url('/storage/' . $this->firstImageUrl),
-//            'image_link' => app(\Flowframe\Drift\UrlBuilder::class)->url('dashed', $this->firstImageUrl, []),
+//            'image_link' => app(\Dashed\Drift\UrlBuilder::class)->url('dashed', $this->firstImageUrl, []),
         ];
 
         $imageCount = 1;
@@ -34,10 +34,10 @@ class ChannableProductResource extends JsonResource
         foreach ($this->allImagesExceptFirst as $image) {
             if ($imageCount == 1) {
                 $additionalImageLinks .= url('/storage/' . $image['image']);
-                $additionalImageLinks .= app(\Flowframe\Drift\UrlBuilder::class)->url('dashed', $image['image'], []);
+                $additionalImageLinks .= app(\Dashed\Drift\UrlBuilder::class)->url('dashed', $image['image'], []);
             } else {
                 $additionalImageLinks .= ';' . url('/storage/' . $image['image']);
-                $additionalImageLinks .= ';' . app(\Flowframe\Drift\UrlBuilder::class)->url('dashed', $image['image'], []);
+                $additionalImageLinks .= ';' . app(\Dashed\Drift\UrlBuilder::class)->url('dashed', $image['image'], []);
             }
             $imageCount++;
         }
