@@ -2,12 +2,12 @@
 
 namespace Dashed\DashedEcommerceChannable\Commands;
 
-use Dashed\DashedCore\Classes\Locales;
-use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
-use Dashed\DashedEcommerceCore\Models\Product;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
+use Dashed\DashedCore\Classes\Locales;
 use Illuminate\Support\Facades\Storage;
+use Dashed\DashedEcommerceCore\Models\Product;
+use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
 
 class CreateJSONFeedsCommand extends Command
 {

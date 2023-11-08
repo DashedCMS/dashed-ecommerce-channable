@@ -2,18 +2,17 @@
 
 namespace Dashed\DashedEcommerceChannable;
 
-use Dashed\DashedEcommerceChannable\Commands\CreateJSONFeedsCommand;
-use Dashed\DashedEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
-use Dashed\DashedEcommerceChannable\Commands\SyncStockFromChannableCommand;
-use Dashed\DashedEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
-use Dashed\DashedEcommerceChannable\Filament\Widgets\ChannableOrderStats;
-use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
-use Dashed\DashedEcommerceCore\Models\Order;
-use Filament\PluginServiceProvider;
-use Illuminate\Console\Scheduling\Schedule;
 use Spatie\LaravelPackageTools\Package;
+use Illuminate\Console\Scheduling\Schedule;
+use Dashed\DashedEcommerceCore\Models\Order;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
+use Dashed\DashedEcommerceChannable\Commands\CreateJSONFeedsCommand;
+use Dashed\DashedEcommerceChannable\Commands\SyncStockFromChannableCommand;
+use Dashed\DashedEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
+use Dashed\DashedEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
 
-class DashedEcommerceChannableServiceProvider extends PluginServiceProvider
+class DashedEcommerceChannableServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'dashed-ecommerce-channable';
 
@@ -41,7 +40,7 @@ class DashedEcommerceChannableServiceProvider extends PluginServiceProvider
                 'channable' => [
                     'name' => 'Channable',
                     'description' => 'Koppel Channable',
-                    'icon' => 'archive',
+                    'icon' => 'archive-box',
                     'page' => ChannableSettingsPage::class,
                 ],
             ])
@@ -58,19 +57,5 @@ class DashedEcommerceChannableServiceProvider extends PluginServiceProvider
                 SyncOrdersFromChannableCommand::class,
                 SyncStockFromChannableCommand::class,
             ]);
-    }
-
-    protected function getPages(): array
-    {
-        return array_merge(parent::getPages(), [
-            ChannableSettingsPage::class,
-        ]);
-    }
-
-    protected function getWidgets(): array
-    {
-        return array_merge(parent::getWidgets(), [
-            ChannableOrderStats::class,
-        ]);
     }
 }
