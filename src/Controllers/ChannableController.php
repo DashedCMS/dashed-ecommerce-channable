@@ -2,13 +2,13 @@
 
 namespace Dashed\DashedEcommerceChannable\Controllers;
 
-use Dashed\DashedCore\Classes\Locales;
-use Dashed\DashedCore\Controllers\Frontend\FrontendController;
-use Dashed\DashedCore\Models\Customsetting;
-use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
-use Dashed\DashedEcommerceCore\Models\Product;
 use Illuminate\Support\Facades\App;
+use Dashed\DashedCore\Classes\Locales;
 use Illuminate\Support\Facades\Storage;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceCore\Models\Product;
+use Dashed\DashedCore\Controllers\Frontend\FrontendController;
+use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
 
 class ChannableController extends FrontendController
 {
@@ -21,7 +21,7 @@ class ChannableController extends FrontendController
             return Storage::disk('dashed')->get('/channable-feeds/channable-feed-' . $locale['id'] . '.json');
 
             return json_encode(ChannableProductResource::collection(Product::publicShowable()->get()));
-            //            return json_encode(ChannableProductResource::collection(Product::publicShowable()->limit(100)->get()));
+        //            return json_encode(ChannableProductResource::collection(Product::publicShowable()->limit(100)->get()));
         } else {
             return json_encode([]);
         }

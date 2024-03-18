@@ -2,26 +2,24 @@
 
 namespace Dashed\DashedEcommerceChannable\Filament\Pages\Settings;
 
-use Dashed\DashedCore\Classes\Sites;
-use Dashed\DashedCore\Models\Customsetting;
-use Dashed\DashedEcommerceChannable\Classes\Channable;
-use Filament\Forms\Components\Placeholder;
+use Filament\Pages\Page;
 use Filament\Forms\Components\Tabs;
+use Dashed\DashedCore\Classes\Sites;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Pages\Page;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\Placeholder;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceChannable\Classes\Channable;
 
-class ChannableSettingsPage extends Page implements HasForms
+class ChannableSettingsPage extends Page
 {
-    use InteractsWithForms;
-
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'Channable';
 
     protected static string $view = 'dashed-core::settings.pages.default-settings';
+    public array $data = [];
 
     public function mount(): void
     {
@@ -64,19 +62,13 @@ class ChannableSettingsPage extends Page implements HasForms
                     ]),
                 TextInput::make("channable_api_key_{$site['id']}")
                     ->label('Channable API key')
-                    ->rules([
-                        'max:255',
-                    ]),
+                    ->maxLength(255),
                 TextInput::make("channable_company_id_{$site['id']}")
                     ->label('Channable company ID')
-                    ->rules([
-                        'max:255',
-                    ]),
+                    ->maxLength(255),
                 TextInput::make("channable_project_id_{$site['id']}")
                     ->label('Channable project ID')
-                    ->rules([
-                        'max:255',
-                    ]),
+                    ->maxLength(255),
                 Toggle::make("channable_feed_enabled_{$site['id']}")
                     ->label('Channable feed aanzetten'),
                 Toggle::make("channable_order_sync_enabled_{$site['id']}")
@@ -99,6 +91,11 @@ class ChannableSettingsPage extends Page implements HasForms
         return $tabGroups;
     }
 
+    public function getFormStatePath(): ?string
+    {
+        return 'data';
+    }
+
     public function submit()
     {
         $sites = Sites::getSites();
@@ -113,7 +110,10 @@ class ChannableSettingsPage extends Page implements HasForms
             Customsetting::set('channable_connected', Channable::isConnected($site['id']), $site['id']);
         }
 
-        $this->notify('success', 'De Channable instellingen zijn opgeslagen');
+        Notification::make()
+            ->title('De Channable instellingen zijn opgeslagen')
+            ->success()
+            ->send();
 
         return redirect(ChannableSettingsPage::getUrl());
     }
