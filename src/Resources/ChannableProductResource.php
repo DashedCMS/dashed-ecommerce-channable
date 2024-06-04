@@ -34,10 +34,10 @@ class ChannableProductResource extends JsonResource
         foreach ($this->allImagesExceptFirst as $image) {
             if ($imageCount == 1) {
                 $additionalImageLinks .= url('/storage/' . $image['image']);
-                $additionalImageLinks .= app(\Dashed\Drift\UrlBuilder::class)->url('dashed', $image['image'], []);
+                $additionalImageLinks .= mediaHelper()->getSingleImage($image['image'], 'medium');
             } else {
                 $additionalImageLinks .= ';' . url('/storage/' . $image['image']);
-                $additionalImageLinks .= ';' . app(\Dashed\Drift\UrlBuilder::class)->url('dashed', $image['image'], []);
+                $additionalImageLinks .= ';' . mediaHelper()->getSingleImage($image['image'], 'medium');
             }
             $imageCount++;
         }
