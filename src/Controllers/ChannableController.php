@@ -2,13 +2,13 @@
 
 namespace Dashed\DashedEcommerceChannable\Controllers;
 
-use Dashed\DashedCore\Classes\Locales;
-use Dashed\DashedCore\Controllers\Frontend\FrontendController;
-use Dashed\DashedCore\Models\Customsetting;
-use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
-use Dashed\DashedEcommerceCore\Models\Product;
 use Illuminate\Support\Facades\App;
+use Dashed\DashedCore\Classes\Locales;
 use Illuminate\Support\Facades\Storage;
+use Dashed\DashedCore\Models\Customsetting;
+use Dashed\DashedEcommerceCore\Models\Product;
+use Dashed\DashedCore\Controllers\Frontend\FrontendController;
+use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
 
 class ChannableController extends FrontendController
 {

@@ -2,10 +2,10 @@
 
 namespace Dashed\DashedEcommerceChannable;
 
-use Dashed\DashedEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
-use Dashed\DashedEcommerceChannable\Filament\Widgets\ChannableOrderStats;
-use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Filament\Contracts\Plugin;
+use Dashed\DashedEcommerceChannable\Filament\Widgets\ChannableOrderStats;
+use Dashed\DashedEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
 
 class DashedEcommerceChannablePlugin implements Plugin
 {

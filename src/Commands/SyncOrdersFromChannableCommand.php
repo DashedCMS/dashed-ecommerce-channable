@@ -2,10 +2,10 @@
 
 namespace Dashed\DashedEcommerceChannable\Commands;
 
+use Illuminate\Console\Command;
 use Dashed\DashedCore\Models\Customsetting;
 use Dashed\DashedEcommerceChannable\Classes\Channable;
 use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
-use Illuminate\Console\Command;
 
 class SyncOrdersFromChannableCommand extends Command
 {

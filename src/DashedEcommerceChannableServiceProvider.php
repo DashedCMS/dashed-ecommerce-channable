@@ -2,15 +2,15 @@
 
 namespace Dashed\DashedEcommerceChannable;
 
-use Dashed\DashedEcommerceChannable\Commands\CreateJSONFeedsCommand;
-use Dashed\DashedEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
-use Dashed\DashedEcommerceChannable\Commands\SyncStockFromChannableCommand;
-use Dashed\DashedEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
-use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
-use Dashed\DashedEcommerceCore\Models\Order;
-use Illuminate\Console\Scheduling\Schedule;
 use Spatie\LaravelPackageTools\Package;
+use Illuminate\Console\Scheduling\Schedule;
+use Dashed\DashedEcommerceCore\Models\Order;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
+use Dashed\DashedEcommerceChannable\Commands\CreateJSONFeedsCommand;
+use Dashed\DashedEcommerceChannable\Commands\SyncStockFromChannableCommand;
+use Dashed\DashedEcommerceChannable\Commands\SyncOrdersFromChannableCommand;
+use Dashed\DashedEcommerceChannable\Filament\Pages\Settings\ChannableSettingsPage;
 
 class DashedEcommerceChannableServiceProvider extends PackageServiceProvider
 {
