@@ -25,7 +25,8 @@ class ChannableProductResource extends JsonResource
             'description' => $this->description,
             'ean' => $this->ean,
             'sku' => $this->sku,
-            'image_link' => url('/storage/' . $this->firstImageUrl),
+            'image_link' => mediaHelper()->getSingleMedia($this->firstImageUrl, 'original')->url ?? '',
+//            'image_link' => url('/storage/' . $this->firstImageUrl),
 //            'image_link' => app(\Dashed\Drift\UrlBuilder::class)->url('dashed', $this->firstImageUrl, []),
         ];
 
@@ -33,11 +34,11 @@ class ChannableProductResource extends JsonResource
         $additionalImageLinks = '';
         foreach ($this->allImagesExceptFirst as $image) {
             if ($imageCount == 1) {
-                $additionalImageLinks .= url('/storage/' . $image['image']);
-                $additionalImageLinks .= mediaHelper()->getSingleImage($image['image'], 'medium')->url ?? '';
+//                $additionalImageLinks .= url('/storage/' . $image['image']);
+                $additionalImageLinks .= mediaHelper()->getSingleMedia($image['image'], 'original')->url ?? '';
             } else {
-                $additionalImageLinks .= ';' . url('/storage/' . $image['image']);
-                $additionalImageLinks .= ';' . mediaHelper()->getSingleImage($image['image'], 'medium')->url ?? '';
+//                $additionalImageLinks .= ';' . url('/storage/' . $image['image']);
+                $additionalImageLinks .= ';' . mediaHelper()->getSingleMedia($image['image'], 'original')->url ?? '';
             }
             $imageCount++;
         }
