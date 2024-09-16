@@ -32,13 +32,13 @@ class ChannableProductResource extends JsonResource
 
         $imageCount = 1;
         $additionalImageLinks = '';
-        foreach ($this->allImagesExceptFirst as $image) {
+        foreach ($this->imagesExceptFirst as $image) {
             if ($imageCount == 1) {
                 //                $additionalImageLinks .= url('/storage/' . $image['image']);
-                $additionalImageLinks .= mediaHelper()->getSingleMedia($image['image'], 'original')->url ?? '';
+                $additionalImageLinks .= mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
             } else {
                 //                $additionalImageLinks .= ';' . url('/storage/' . $image['image']);
-                $additionalImageLinks .= ';' . mediaHelper()->getSingleMedia($image['image'], 'original')->url ?? '';
+                $additionalImageLinks .= ';' . mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
             }
             $imageCount++;
         }
