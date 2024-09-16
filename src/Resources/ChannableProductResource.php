@@ -25,9 +25,9 @@ class ChannableProductResource extends JsonResource
             'description' => $this->description,
             'ean' => $this->ean,
             'sku' => $this->sku,
-            'image_link' => mediaHelper()->getSingleMedia($this->firstImageUrl, 'original')->url ?? '',
-//            'image_link' => url('/storage/' . $this->firstImageUrl),
-//            'image_link' => app(\Dashed\Drift\UrlBuilder::class)->url('dashed', $this->firstImageUrl, []),
+            'image_link' => mediaHelper()->getSingleMedia($this->firstImage, 'original')->url ?? '',
+//            'image_link' => url('/storage/' . $this->firstImage),
+//            'image_link' => app(\Dashed\Drift\UrlBuilder::class)->url('dashed', $this->firstImage, []),
         ];
 
         $imageCount = 1;
