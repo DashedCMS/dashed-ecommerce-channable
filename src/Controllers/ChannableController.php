@@ -19,6 +19,7 @@ class ChannableController extends FrontendController
             App::setLocale($locale['id']);
 
             $contents = Storage::disk('dashed')->get('/channable-feeds/channable-feed-' . $locale['id'] . '.json');
+
             return json_decode($contents, true);
 
             return json_encode(ChannableProductResource::collection(Product::publicShowable()->get()));
