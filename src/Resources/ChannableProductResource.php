@@ -25,22 +25,23 @@ class ChannableProductResource extends JsonResource
             'description' => $this->description,
             'ean' => $this->ean,
             'sku' => $this->sku,
-            'image_link' => mediaHelper()->getSingleMedia($this->firstImage, 'original')->url ?? '',
-//            'image_link' => url('/storage/' . $this->firstImage),
-//            'image_link' => app(\Dashed\Drift\UrlBuilder::class)->url('dashed', $this->firstImage, []),
+            'image_link' => $this->firstImage ? (mediaHelper()->getSingleMedia($this->firstImage, 'original')->url ?? '') : null,
         ];
 
         $imageCount = 1;
         $additionalImageLinks = '';
         foreach ($this->imagesExceptFirst as $image) {
             if ($imageCount == 1) {
-                //                $additionalImageLinks .= url('/storage/' . $image['image']);
-                $additionalImageLinks .= mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
+                if ($image) {
+                    $additionalImageLinks .= mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
+                    $imageCount++;
+                }
             } else {
-                //                $additionalImageLinks .= ';' . url('/storage/' . $image['image']);
-                $additionalImageLinks .= ';' . mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
+                if ($image) {
+                    $additionalImageLinks .= ';' . mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
+                    $imageCount++;
+                }
             }
-            $imageCount++;
         }
         $array['additional_image_link'] = $additionalImageLinks;
 
