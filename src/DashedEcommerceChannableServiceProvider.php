@@ -2,6 +2,7 @@
 
 namespace Dashed\DashedEcommerceChannable;
 
+use Dashed\DashedCore\DashedCorePlugin;
 use Spatie\LaravelPackageTools\Package;
 use Illuminate\Console\Scheduling\Schedule;
 use Dashed\DashedEcommerceCore\Models\Order;
@@ -57,5 +58,9 @@ class DashedEcommerceChannableServiceProvider extends PackageServiceProvider
                 SyncOrdersFromChannableCommand::class,
                 SyncStockFromChannableCommand::class,
             ]);
+
+        cms()->builder('plugins', [
+            new DashedEcommerceChannablePlugin(),
+        ]);
     }
 }
