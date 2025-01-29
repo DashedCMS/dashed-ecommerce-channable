@@ -2,7 +2,6 @@
 
 namespace Dashed\DashedEcommerceChannable;
 
-use Dashed\DashedCore\DashedCorePlugin;
 use Spatie\LaravelPackageTools\Package;
 use Illuminate\Console\Scheduling\Schedule;
 use Dashed\DashedEcommerceCore\Models\Order;
