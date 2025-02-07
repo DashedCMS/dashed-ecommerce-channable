@@ -34,17 +34,7 @@ class DashedEcommerceChannableServiceProvider extends PackageServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        cms()->builder(
-            'settingPages',
-            array_merge(cms()->builder('settingPages'), [
-                'channable' => [
-                    'name' => 'Channable',
-                    'description' => 'Koppel Channable',
-                    'icon' => 'archive-box',
-                    'page' => ChannableSettingsPage::class,
-                ],
-            ])
-        );
+        cms()->registerSettingsPage(ChannableSettingsPage::class, 'Channable', 'archive-box', 'Koppel Channable');
 
         $package
             ->name('dashed-ecommerce-channable')
