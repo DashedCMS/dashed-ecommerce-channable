@@ -14,6 +14,12 @@ class ChannableProductResource extends JsonResource
      */
     public function toArray($request)
     {
+        $categories = [];
+
+        foreach ($this->productCategories as $category) {
+            $categories[] = $category->name;
+        }
+
         $array = [
             'id' => $this->id,
             'title' => $this->name,
@@ -26,6 +32,8 @@ class ChannableProductResource extends JsonResource
             'ean' => $this->ean,
             'sku' => $this->sku,
             'image_link' => $this->firstImage ? (mediaHelper()->getSingleMedia($this->firstImage, 'original')->url ?? '') : null,
+            'first_category' => $this->productCategories->first() ? $this->productCategories->first()->name : null,
+            'categories' => $categories,
         ];
 
         $imageCount = 1;
