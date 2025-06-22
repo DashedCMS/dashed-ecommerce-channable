@@ -42,7 +42,7 @@ class ChannableProductResource extends JsonResource
         $allImages = is_array($this->images) ? $this->images : [];
         $allImages = array_merge($allImages, is_array($this->productGroup->images) ? $this->productGroup->images : []);
         $images = [];
-        foreach($allImages as $image) {
+        foreach ($allImages as $image) {
             $images[] = mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
         }
         $array['images'] = $images;
