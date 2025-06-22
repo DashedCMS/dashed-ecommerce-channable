@@ -48,8 +48,8 @@ class ChannableProductResource extends JsonResource
         }
         $array['images'] = $images;
 
-        $characteristics = $this->showableCharacteristics();
-        foreach ($this->productGroup->showableCharacteristicsWithoutFilters() as $characteristic) {
+        $characteristics = $this->allCharacteristics();
+        foreach ($this->productGroup->allCharacteristicsWithoutFilters() as $characteristic) {
             if (collect($characteristics)->where('name', $characteristic['name'])->count() > 0) {
                 $characteristics[collect($characteristics)->where('name', $characteristic['name'])->keys()[0]]['value'] = $characteristic['value'];
             } else {
