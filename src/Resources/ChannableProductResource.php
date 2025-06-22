@@ -2,8 +2,8 @@
 
 namespace Dashed\DashedEcommerceChannable\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use Dashed\DashedEcommerceCore\Models\ProductFilterOption;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ChannableProductResource extends JsonResource
 {
@@ -39,22 +39,9 @@ class ChannableProductResource extends JsonResource
             'categories' => $categories,
         ];
 
-        $imageCount = 1;
-        $additionalImageLinks = '';
-        foreach ($this->imagesExceptFirst as $image) {
-            if ($imageCount == 1) {
-                if ($image) {
-                    $additionalImageLinks .= mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
-                    $imageCount++;
-                }
-            } else {
-                if ($image) {
-                    $additionalImageLinks .= ';' . mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
-                    $imageCount++;
-                }
-            }
-        }
-        $array['additional_image_link'] = $additionalImageLinks;
+        $images = is_array($this->images) ? $this->images : [];
+        $images = array_merge($images, is_array($this->productGroup->images) ? $this->productGroup->images : []);
+        $array['images'] = $images;
 
         foreach ($this->productCharacteristics as $productCharacteristic) {
             if ($productCharacteristic->value !== null && $productCharacteristic->value !== '') {
