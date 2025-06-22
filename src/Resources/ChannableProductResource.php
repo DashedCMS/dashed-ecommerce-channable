@@ -3,7 +3,6 @@
 namespace Dashed\DashedEcommerceChannable\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Dashed\DashedEcommerceCore\Models\ProductFilterOption;
 
 class ChannableProductResource extends JsonResource
 {
@@ -56,7 +55,7 @@ class ChannableProductResource extends JsonResource
             }
         }
 
-        foreach($characteristics as $characteristic) {
+        foreach ($characteristics as $characteristic) {
             if ($characteristic['value'] !== null && $characteristic['value'] !== '') {
                 $array[$characteristic['name']] = $characteristic['value'];
             }
