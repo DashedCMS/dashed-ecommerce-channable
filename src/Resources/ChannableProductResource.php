@@ -2,6 +2,7 @@
 
 namespace Dashed\DashedEcommerceChannable\Resources;
 
+use Dashed\DashedEcommerceCore\Models\ProductFilterOption;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ChannableProductResource extends JsonResource
@@ -56,6 +57,13 @@ class ChannableProductResource extends JsonResource
         foreach ($this->productCharacteristics as $productCharacteristic) {
             if ($productCharacteristic->value !== null && $productCharacteristic->value !== '') {
                 $array[$productCharacteristic->productCharacteristic->name] = $productCharacteristic->value;
+            }
+        }
+
+        foreach ($this->productFilters as $filter) {
+            $filterOption = ProductFilterOption::find($filter->pivot->product_filter_option_id);
+            if ($filterOption) {
+                $array[$filter->name] = $filterOption->name;
             }
         }
 
