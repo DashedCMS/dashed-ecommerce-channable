@@ -47,16 +47,18 @@ class ChannableProductResource extends JsonResource
         }
         $array['images'] = $images;
 
-        foreach ($this->productCharacteristics as $productCharacteristic) {
-            if ($productCharacteristic->value !== null && $productCharacteristic->value !== '') {
-                $array[$productCharacteristic->productCharacteristic->name] = $productCharacteristic->value;
+        $characteristics = $this->showableCharacteristics();
+        foreach ($this->productGroup->showableCharacteristicsWithoutFilters() as $characteristic) {
+            if (collect($characteristics)->where('name', $characteristic['name'])->count() > 0) {
+                $characteristics[collect($characteristics)->where('name', $characteristic['name'])->keys()[0]]['value'] = $characteristic['value'];
+            } else {
+                $characteristics[] = $characteristic;
             }
         }
 
-        foreach ($this->productFilters as $filter) {
-            $filterOption = ProductFilterOption::find($filter->pivot->product_filter_option_id);
-            if ($filterOption) {
-                $array[$filter->name] = $filterOption->name;
+        foreach($characteristics as $characteristic) {
+            if ($characteristic['value'] !== null && $characteristic['value'] !== '') {
+                $array[$characteristic['name']] = $characteristic['value'];
             }
         }
 
