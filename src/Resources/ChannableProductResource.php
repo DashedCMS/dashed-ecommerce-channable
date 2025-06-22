@@ -2,8 +2,8 @@
 
 namespace Dashed\DashedEcommerceChannable\Resources;
 
-use Dashed\DashedEcommerceCore\Models\ProductFilterOption;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Dashed\DashedEcommerceCore\Models\ProductFilterOption;
 
 class ChannableProductResource extends JsonResource
 {
