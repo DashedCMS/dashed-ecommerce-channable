@@ -2,8 +2,8 @@
 
 namespace Dashed\DashedEcommerceChannable\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use Dashed\DashedEcommerceCore\Models\ProductFilterOption;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ChannableProductResource extends JsonResource
 {
@@ -23,16 +23,18 @@ class ChannableProductResource extends JsonResource
 
         $array = [
             'id' => $this->id,
+            'product_group_id' => $this->productGroup->id,
             'title' => $this->name,
             'link' => $this->getUrl(),
             'price' => $this->currentPrice,
             'sale_price' => $this->discountPrice,
             'availability' => $this->directSellableStock() ? true : false,
             'stock' => $this->directSellableStock(),
-            'description' => $this->description,
+            'description' => $this->description ? $this->description : $this->productGroup->description,
+            'short_description' => $this->short_description ? $this->short_description : $this->productGroup->short_description,
             'ean' => $this->ean,
             'sku' => $this->sku,
-            'image_link' => $this->firstImage ? (mediaHelper()->getSingleMedia($this->firstImage, 'original')->url ?? '') : null,
+            'image_link' => $this->firstImage ? (mediaHelper()->getSingleMedia($this->firstImage, 'original')->url ?? '') : ($this->productGroup->firstImage ? (mediaHelper()->getSingleMedia($this->productGroup->firstImage, 'original')->url ?? '') : null),
             'first_category' => $this->productCategories->first() ? $this->productCategories->first()->name : null,
             'categories' => $categories,
         ];
