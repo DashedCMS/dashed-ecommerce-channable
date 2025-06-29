@@ -24,7 +24,7 @@ class ChannableProductResource extends JsonResource
             'id' => $this->id,
             'product_group_id' => $this->productGroup->id,
             'title' => $this->name,
-            'link' => $this->getUrl(),
+            'link' => url($this->getUrl()),
             'price' => $this->currentPrice,
             'sale_price' => $this->discountPrice,
             'availability' => $this->directSellableStock() ? true : false,
@@ -36,7 +36,6 @@ class ChannableProductResource extends JsonResource
             'image_link' => $this->firstImage ? (mediaHelper()->getSingleMedia($this->firstImage, 'original')->url ?? '') : ($this->productGroup->firstImage ? (mediaHelper()->getSingleMedia($this->productGroup->firstImage, 'original')->url ?? '') : null),
             'first_category' => $this->productCategories->first() ? $this->productCategories->first()->name : null,
             'categories' => $categories,
-            'url' => $this->getUrl(),
         ];
 
         $array['images'] = $this->imagesToShow;
