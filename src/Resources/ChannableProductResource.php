@@ -36,17 +36,10 @@ class ChannableProductResource extends JsonResource
             'image_link' => $this->firstImage ? (mediaHelper()->getSingleMedia($this->firstImage, 'original')->url ?? '') : ($this->productGroup->firstImage ? (mediaHelper()->getSingleMedia($this->productGroup->firstImage, 'original')->url ?? '') : null),
             'first_category' => $this->productCategories->first() ? $this->productCategories->first()->name : null,
             'categories' => $categories,
+            'url' => $this->getUrl(),
         ];
 
-        $allImages = is_array($this->images) ? $this->images : [];
-        $allImages = array_merge($allImages, is_array($this->productGroup->images) ? $this->productGroup->images : []);
-        $images = [];
-        foreach ($allImages as $image) {
-            if ($image != ($this->firstImage ?? 0)) {
-                $images[] = mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
-            }
-        }
-        $array['images'] = $images;
+        $array['images'] = $this->imagesToShow;
 
         $characteristics = $this->allCharacteristics();
         foreach ($this->productGroup->allCharacteristicsWithoutFilters() as $characteristic) {
