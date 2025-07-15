@@ -38,7 +38,7 @@ class ChannableProductResource extends JsonResource
             'categories' => $categories,
         ];
 
-        $array['images'] = $this->imagesToShow;
+        $array['images'] = $this->originalImagesToShow;
 
         $characteristics = $this->allCharacteristics();
         foreach ($this->productGroup->allCharacteristicsWithoutFilters() as $characteristic) {
