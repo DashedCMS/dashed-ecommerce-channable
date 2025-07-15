@@ -2,6 +2,7 @@
 
 namespace Dashed\DashedEcommerceChannable\Filament\Pages\Settings;
 
+use Filament\Actions\Action;
 use Filament\Pages\Page;
 use Filament\Forms\Components\Tabs;
 use Dashed\DashedCore\Classes\Sites;
@@ -12,6 +13,7 @@ use Filament\Notifications\Notification;
 use Filament\Forms\Components\Placeholder;
 use Dashed\DashedCore\Models\Customsetting;
 use Dashed\DashedEcommerceChannable\Classes\Channable;
+use Illuminate\Support\Facades\Artisan;
 
 class ChannableSettingsPage extends Page
 {
@@ -116,5 +118,23 @@ class ChannableSettingsPage extends Page
             ->send();
 
         return redirect(ChannableSettingsPage::getUrl());
+    }
+
+    protected function getActions(): array
+    {
+        return [
+          Action::make('refreshJsonFeed')
+            ->label('Refresh JSON feed')
+            ->action(function () {
+                Artisan::call('channable:create-json-feeds');
+
+                Notification::make()
+                    ->title('De JSON feed is vernieuwd')
+                    ->success()
+                    ->send();
+            })
+            ->icon('heroicon-o-arrow-path')
+            ->color('primary'),
+        ];
     }
 }
