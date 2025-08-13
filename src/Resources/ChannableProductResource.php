@@ -20,6 +20,16 @@ class ChannableProductResource extends JsonResource
             $categories[] = $category->name;
         }
 
+        $filters = $this->productGroup->simpleFilters();;
+        foreach ($filters as &$filter) {
+            $productFilterResult = $this->productFilters()->where('product_filter_id', $filter['id'])->first();
+            if ($productFilterResult) {
+                $filter['active'] = $productFilterResult->pivot->product_filter_option_id ?? null;
+            } elseif (count($filter['options'] ?? []) === 1) {
+                $filter['active'] = $filter['options'][0]['id'];
+            }
+        }
+
         $array = [
             'id' => $this->id,
             'product_group_id' => $this->productGroup->id,
@@ -29,8 +39,8 @@ class ChannableProductResource extends JsonResource
             'sale_price' => $this->discountPrice,
             'availability' => $this->directSellableStock() ? true : false,
             'stock' => $this->directSellableStock(),
-            'description' => $this->description ? $this->description : $this->productGroup->description,
-            'short_description' => $this->short_description ? $this->short_description : $this->productGroup->short_description,
+            'description' => ($this->product && $this->product->description) ? $this->product->replaceContentVariables($this->product->description, $filters) : $this->productGroup->replaceContentVariables($this->productGroup->description, $filters, $this->product),
+            'short_description' => ($this->product && $this->product->short_description) ? $this->product->replaceContentVariables($this->product->short_description, $filters) : $this->productGroup->replaceContentVariables($this->productGroup->short_description, $filters, $this->product),
             'ean' => $this->ean,
             'sku' => $this->sku,
             'image_link' => $this->firstImage ? (mediaHelper()->getSingleMedia($this->firstImage, 'original')->url ?? '') : ($this->productGroup->firstImage ? (mediaHelper()->getSingleMedia($this->productGroup->firstImage, 'original')->url ?? '') : null),
