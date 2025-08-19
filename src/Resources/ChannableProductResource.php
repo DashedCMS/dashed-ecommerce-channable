@@ -20,7 +20,8 @@ class ChannableProductResource extends JsonResource
             $categories[] = $category->name;
         }
 
-        $filters = $this->productGroup->simpleFilters();;
+        $filters = $this->productGroup->simpleFilters();
+        ;
         foreach ($filters as &$filter) {
             $productFilterResult = $this->productFilters()->where('product_filter_id', $filter['id'])->first();
             if ($productFilterResult) {
