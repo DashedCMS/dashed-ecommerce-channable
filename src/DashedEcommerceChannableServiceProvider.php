@@ -38,7 +38,7 @@ class DashedEcommerceChannableServiceProvider extends PackageServiceProvider
 
         $package
             ->name('dashed-ecommerce-channable')
-            ->hasViews()
+//            ->hasViews()
             ->hasRoutes([
                 'channableRoutes',
             ])
