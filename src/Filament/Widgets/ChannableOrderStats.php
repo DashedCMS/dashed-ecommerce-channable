@@ -11,7 +11,7 @@ class ChannableOrderStats extends StatsOverviewWidget
     protected function getCards(): array
     {
         return [
-            Card::make('Aantal bestellingen vanuit Channable', ChannableOrder::count()),
+            StatsOverviewWidget\Stat::make('Aantal bestellingen vanuit Channable', ChannableOrder::count()),
         ];
     }
 }

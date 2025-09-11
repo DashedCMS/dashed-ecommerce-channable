@@ -2,6 +2,7 @@
 
 namespace Dashed\DashedEcommerceChannable;
 
+use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
 use Filament\Panel;
 use Filament\Contracts\Plugin;
 use Dashed\DashedEcommerceChannable\Filament\Widgets\ChannableOrderStats;
@@ -16,10 +17,14 @@ class DashedEcommerceChannablePlugin implements Plugin
 
     public function register(Panel $panel): void
     {
+        $widgets = [];
+
+        if(ChannableOrder::count()){
+            $widgets[] = ChannableOrderStats::class;
+        }
+
         $panel
-            ->widgets([
-                ChannableOrderStats::class,
-            ])
+            ->widgets($widgets)
             ->pages([
                 ChannableSettingsPage::class,
             ]);
