@@ -3,7 +3,6 @@
 namespace Dashed\DashedEcommerceChannable\Filament\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget;
-use Filament\Widgets\StatsOverviewWidget\Card;
 use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
 
 class ChannableOrderStats extends StatsOverviewWidget
