@@ -19,7 +19,7 @@ class DashedEcommerceChannablePlugin implements Plugin
     {
         $widgets = [];
 
-        if (ChannableOrder::count()) {
+        if (cms()->isCMSRoute() && ChannableOrder::count()) {
             $widgets[] = ChannableOrderStats::class;
         }
 
