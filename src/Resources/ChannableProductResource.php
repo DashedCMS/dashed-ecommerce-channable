@@ -47,6 +47,10 @@ class ChannableProductResource extends JsonResource
             'image_link' => $this->firstImage ? (mediaHelper()->getSingleMedia($this->firstImage, 'original')->url ?? '') : ($this->productGroup->firstImage ? (mediaHelper()->getSingleMedia($this->productGroup->firstImage, 'original')->url ?? '') : null),
             'first_category' => $this->productCategories->first() ? $this->productCategories->first()->name : null,
             'categories' => $categories,
+            'width' => $this->width,
+            'height' => $this->height,
+            'length' => $this->length,
+            'weight' => $this->weight,
         ];
 
         $array['images'] = $this->originalImagesToShow;
