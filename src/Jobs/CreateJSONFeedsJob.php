@@ -1,6 +1,6 @@
 <?php
 
-namespace Dashed\DashedCore\Jobs;
+namespace Dashed\DashedEcommerceChannable\Jobs;
 
 use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
 use Dashed\DashedEcommerceCore\Models\Product;
