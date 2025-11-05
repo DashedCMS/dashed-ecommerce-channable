@@ -2,6 +2,7 @@
 
 namespace Dashed\DashedEcommerceChannable\Commands;
 
+use Dashed\DashedCore\Jobs\CreateJSONFeedsJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Dashed\DashedCore\Classes\Locales;
@@ -42,12 +43,6 @@ class CreateJSONFeedsCommand extends Command
      */
     public function handle()
     {
-        foreach (Locales::getLocales() as $locale) {
-            App::setLocale($locale['id']);
-
-            $json = json_encode(ChannableProductResource::collection(Product::publicShowable()->get()));
-
-            Storage::disk('dashed')->put('/channable-feeds/channable-feed-' . $locale['id'] . '.json', $json);
-        }
+        CreateJSONFeedsJob::dispatch()->onQueue('ecommerce');
     }
 }
