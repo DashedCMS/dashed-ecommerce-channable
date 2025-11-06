@@ -24,7 +24,8 @@ class CreateJSONFeedsJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public $timeout = 2400;
+    public $timeout = 3000;
+    public $tries = 3;
 
     /**
      * Create a new job instance.
