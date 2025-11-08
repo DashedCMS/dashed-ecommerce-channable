@@ -22,7 +22,7 @@ class DashedEcommerceChannableServiceProvider extends PackageServiceProvider
             $schedule = app(Schedule::class);
             $schedule->command(SyncOrdersFromChannableCommand::class)->everyFifteenMinutes();
             $schedule->command(SyncStockFromChannableCommand::class)->everyFifteenMinutes();
-            $schedule->command(CreateJSONFeedsCommand::class)->everyFifteenMinutes();
+            $schedule->command(CreateJSONFeedsCommand::class)->hourly();
         });
 
         Order::addDynamicRelation('channableOrder', function (Order $model) {
