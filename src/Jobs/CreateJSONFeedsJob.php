@@ -2,20 +2,16 @@
 
 namespace Dashed\DashedEcommerceChannable\Jobs;
 
-use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
-use Dashed\DashedEcommerceCore\Models\Product;
 use Illuminate\Bus\Queueable;
-use Dashed\DashedCore\Classes\Sites;
+use Illuminate\Support\Facades\App;
 use Dashed\DashedCore\Classes\Locales;
 use Illuminate\Queue\SerializesModels;
-use Dashed\DashedCore\Models\UrlHistory;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Queue\InteractsWithQueue;
-use Dashed\DashedCore\Models\Customsetting;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Storage;
+use Dashed\DashedEcommerceCore\Models\Product;
+use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
 
 class CreateJSONFeedsJob implements ShouldQueue
 {
@@ -24,8 +20,8 @@ class CreateJSONFeedsJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public $timeout = 3000;
-    public $tries = 3;
+    public $timeout = 6000;
+    public $tries = 10;
 
     /**
      * Create a new job instance.
@@ -46,5 +42,10 @@ class CreateJSONFeedsJob implements ShouldQueue
 
             Storage::disk('dashed')->put('/channable-feeds/channable-feed-' . $locale['id'] . '.json', $json);
         }
+    }
+
+    public function failed(\Throwable $exception)
+    {
+        throw new \Exception('CreateJSONFeedsJob failed: ' . $exception->getMessage());
     }
 }

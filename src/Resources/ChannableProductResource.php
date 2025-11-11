@@ -55,6 +55,13 @@ class ChannableProductResource extends JsonResource
 
         $array['images'] = $this->originalImagesToShow;
 
+        unset($array['images'][0]);
+        $count = 2;
+        foreach($this->originalImagesToShow as $image){
+            $array['image_link_' . $count] = mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
+            $count++;
+        }
+
         $characteristics = $this->allCharacteristics();
         foreach ($this->productGroup->allCharacteristicsWithoutFilters() as $characteristic) {
             if (collect($characteristics)->where('name', $characteristic['name'])->count() > 0) {
