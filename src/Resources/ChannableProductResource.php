@@ -58,7 +58,7 @@ class ChannableProductResource extends JsonResource
         unset($array['images'][0]);
         $count = 2;
         foreach($this->originalImagesToShow as $image){
-            $array['image_link_' . $count] = mediaHelper()->getSingleMedia($image, 'original')->url ?? '';
+            $array['image_link_' . $count] = $image;
             $count++;
         }
 
