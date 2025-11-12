@@ -9,73 +9,44 @@ class ChannableProductResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * Performance notes:
-     * - Verwacht dat de volgende relaties eager-loaded zijn:
-     *   productCategories, productGroup.activeProductFilters.productFilterOptions,
+     * Let op:
+     * - Eager-load in je query: productCategories, productGroup.activeProductFilters.productFilterOptions,
      *   productFilters (met pivot), productCharacteristics.productCharacteristic,
-     *   productGroup.productCharacteristics.productCharacteristic
+     *   productGroup.productCharacteristics.productCharacteristic.
      */
     public function toArray($request)
     {
-        // 1) Categories (geen loops met queries)
         $categories = $this->productCategories
             ? $this->productCategories->pluck('name')->values()->all()
             : [];
 
-        // 2) Filters samenstellen ZONDER queries in de loop
-        //    - assignedOptions: [product_filter_id => product_filter_option_id]
-        $assignedOptions = $this->productFilters
-            ? $this->productFilters->mapWithKeys(fn ($pf) => [$pf->id => $pf->pivot->product_filter_option_id])->all()
-            : [];
-
-        $filters = [];
-        if ($this->productGroup && $this->productGroup->relationLoaded('activeProductFilters')) {
-            foreach ($this->productGroup->activeProductFilters as $filter) {
-                // Opties lokaal vertalen met fallback
-                $options = [];
-                foreach ($filter->productFilterOptions as $opt) {
-                    $name = $opt->name[app()->getLocale()] ?? ($opt->name[array_key_first((array) $opt->name)] ?? 'onbekend');
-                    $options[] = [
-                        'id'   => $opt->id,
-                        'name' => $name,
-                    ];
-                }
-
-                $active = $assignedOptions[$filter->id] ?? (count($options) === 1 ? $options[0]['id'] : null);
-
-                $filters[] = [
-                    'id'            => $filter->id,
-                    'name'          => $filter->name,
-                    'type'          => $filter->type,
-                    'options'       => $options,
-                    'active'        => $active,
-                    'contentBlocks' => $filter->contentBlocks, // attribuut, geen query
-                ];
+        $filters = $this->productGroup?->simpleFilters() ?? [];
+        foreach ($filters as &$filter) {
+            $productFilterResult = $this->productFilters()->where('product_filter_id', $filter['id'])->first();
+            if ($productFilterResult) {
+                $filter['active'] = $productFilterResult->pivot->product_filter_option_id ?? null;
+            } elseif (count($filter['options'] ?? []) === 1) {
+                $filter['active'] = $filter['options'][0]['id'];
             }
         }
+        unset($filter); // break reference
 
-        // 3) Afbeeldingen (niet 2x loopen, geen unset-truc)
-        //    Pak product-images; zo niet, val terug op productGroup
+        // 3) Images (één keer bepalen, geen unset-truc)
         $images = $this->originalImagesToShow;
         if (empty($images) && $this->productGroup) {
             $images = $this->productGroup->originalImagesToShow;
         }
-
         $imageLink = $images[0] ?? null;
 
-        // 4) Stock / availability: snelle velden i.p.v. zware helpers
-        //    (Val desnoods terug op directSellableStock() als er geen velden zijn.)
+        // 4) Stock/availability (snelle velden, met fallback)
         $stock = $this->total_stock ?? null;
         $availability = $this->in_stock ?? null;
-
         if ($stock === null || $availability === null) {
-            // fallback, maar probeer dit te vermijden; het kan traag zijn
             $stock = $this->directSellableStock();
             $availability = $stock > 0;
         }
 
-        // 5) Descriptions met 1x filters-structuur
-        //    Houd bestaande API van replaceContentVariables in stand.
+        // 5) Descriptions met bestaande replaceContentVariables signature
         $description = null;
         $shortDescription = null;
 
@@ -91,78 +62,80 @@ class ChannableProductResource extends JsonResource
             $shortDescription = $this->productGroup->replaceContentVariables($this->productGroup->short_description, $filters, $this->product);
         }
 
-        // 6) Characteristics: O(1) mergen via map i.p.v. collect()->where()
-        //    a) Filter-waarden (zoals allCharacteristics() dat doet)
         $characteristicsMap = [];
 
         if ($this->productGroup && $this->productGroup->relationLoaded('activeProductFilters')) {
-            foreach ($this->productGroup->activeProductFilters as $filter) {
-                // waarde = naam van de geselecteerde optie (op basis van $assignedOptions)
+            foreach ($this->productGroup->activeProductFilters as $filterModel) {
                 $value = '';
-                $optionId = $assignedOptions[$filter->id] ?? null;
-                if ($optionId) {
-                    $opt = $filter->productFilterOptions->firstWhere('id', $optionId);
-                    if ($opt) {
-                        $value = $opt->name[app()->getLocale()] ?? ($opt->name[array_key_first((array) $opt->name)] ?? 'onbekend');
+                $activeId = null;
+                foreach ($filters as $f) {
+                    if (($f['id'] ?? null) === $filterModel->id) {
+                        $activeId = $f['active'] ?? null;
+
+                        break;
                     }
                 }
-                $characteristicsMap[$filter->name] = $value;
+                if ($activeId) {
+                    $opt = $filterModel->productFilterOptions->firstWhere('id', $activeId);
+                    if ($opt) {
+                        $value = $opt->name ?? 'onbekend';
+                    }
+                }
+                $characteristicsMap[$filterModel->name] = $value;
             }
         }
 
-        //    b) Product characteristics
-        if ($this->relationLoaded('productCharacteristics')) {
-            foreach ($this->productCharacteristics as $pc) {
-                $def = $pc->relationLoaded('productCharacteristic') ? $pc->productCharacteristic : null;
-                $name = $def->name ?? null;
-                if ($name && $pc->value !== null && $pc->value !== '') {
-                    $characteristicsMap[$name] = $pc->value;
+
+        if ($this->productGroup) {
+            foreach ($this->productGroup->allCharacteristicsWithoutFilters() as $gc) {
+                if ($gc['value']) {
+                    $characteristicsMap[$gc['name']] = $gc['value'];
                 }
             }
         }
 
-        //    c) Group characteristics (overschrijven product waar nodig)
-        if ($this->productGroup && $this->productGroup->relationLoaded('productCharacteristics')) {
-            foreach ($this->productGroup->productCharacteristics as $gc) {
-                $def = $gc->relationLoaded('productCharacteristic') ? $gc->productCharacteristic : null;
-                $name = $def->name ?? null;
-                if ($name && $gc->value !== null && $gc->value !== '') {
-                    $characteristicsMap[$name] = $gc->value;
-                }
+        foreach ($this->allCharacteristics() as $gc) {
+            if ($gc['value']) {
+                $characteristicsMap[$gc['name']] = $gc['value'];
             }
+            //        }
+            //        foreach ($this->allCharacteristics() as $gc) {
+            //            if($gc['value']){
+            //                $characteristicsMap[$gc['name']] = $gc['value'];
+            //            }
         }
 
-        // 7) Basis array
+        // 7) Basis payload
         $array = [
-            'id'               => $this->id,
+            'id' => $this->id,
             'product_group_id' => $this->product_group_id ?? ($this->productGroup->id ?? null),
-            'title'            => $this->name,
-            'link'             => url($this->getUrl()),
-            'price'            => $this->currentPrice,
-            'sale_price'       => $this->discountPrice,
-            'availability'     => (bool) $availability,
-            'stock'            => $stock,
-            'description'      => $description,
-            'short_description'=> $shortDescription,
-            'ean'              => $this->ean,
-            'sku'              => $this->sku,
-            'image_link'       => $imageLink,
-            'first_category'   => $categories[0] ?? null,
-            'categories'       => $categories,
-            'width'            => $this->width,
-            'height'           => $this->height,
-            'length'           => $this->length,
-            'weight'           => $this->weight,
+            'title' => $this->name,
+            'link' => url($this->getUrl()),
+            'price' => $this->currentPrice,
+            'sale_price' => $this->discountPrice,
+            'availability' => (bool)$availability,
+            'stock' => $stock,
+            'description' => $description,
+            'short_description' => $shortDescription,
+            'ean' => $this->ean,
+            'sku' => $this->sku,
+            'image_link' => $imageLink,
+            'first_category' => $categories[0] ?? null,
+            'categories' => $categories,
+            'width' => $this->width,
+            'height' => $this->height,
+            'length' => $this->length,
+            'weight' => $this->weight,
         ];
 
-        // 8) Extra images als image_link_2..n (geen tussenstap met ['images'] + unset)
-        if (!empty($images)) {
+        // 8) Extra images als image_link_2..n
+        if (! empty($images)) {
             foreach (array_values(array_slice($images, 1)) as $idx => $url) {
                 $array['image_link_' . ($idx + 2)] = $url;
             }
         }
 
-        // 9) Characteristics vlak in array dumpen
+        // 9) Characteristics vlak in array
         foreach ($characteristicsMap as $name => $value) {
             if ($value !== null && $value !== '') {
                 $array[$name] = $value;
