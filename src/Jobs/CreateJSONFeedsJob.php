@@ -38,7 +38,7 @@ class CreateJSONFeedsJob implements ShouldQueue
         foreach (Locales::getLocales() as $locale) {
             App::setLocale($locale['id']);
 
-            $json = json_encode(ChannableProductResource::collection(Product::publicShowable()->limit(1)->get()));
+            $json = json_encode(ChannableProductResource::collection(Product::publicShowable()->get()));
 
             Storage::disk('dashed')->put('/channable-feeds/channable-feed-' . $locale['id'] . '.json', $json);
         }
