@@ -2,6 +2,8 @@
 
 namespace Dashed\DashedEcommerceChannable\Filament\Pages\Settings;
 
+use Dashed\DashedCore\Classes\Locales;
+use Filament\Actions\ActionGroup;
 use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Schemas\Schema;
@@ -55,7 +57,7 @@ class ChannableSettingsPage extends Page
                         'default' => 1,
                         'lg' => 2,
                     ]),
-                TextEntry::make("Channable is " . (! Customsetting::get('channable_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
+                TextEntry::make("Channable is " . (!Customsetting::get('channable_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
                     ->state(Customsetting::get('channable_connection_error', $site['id'], ''))
                     ->columnSpan([
                         'default' => 1,
@@ -117,19 +119,34 @@ class ChannableSettingsPage extends Page
 
     protected function getActions(): array
     {
-        return [
-          Action::make('refreshJsonFeed')
-            ->label('Refresh JSON feed')
-            ->action(function () {
-                Artisan::call('channable:create-json-feeds');
+        $jsonFeedActions = [];
 
-                Notification::make()
-                    ->title('De JSON feed is vernieuwd')
-                    ->success()
-                    ->send();
-            })
-            ->icon('heroicon-o-arrow-path')
-            ->color('primary'),
+        foreach(Locales::getLocales() as $locale) {
+            $jsonFeedActions[] = Action::make("openJsonFeed_{$locale['id']}")
+                ->label(ucfirst($locale['name']))
+                ->url(route('dashed.channable-feed', ['locale' => $locale['id']]))
+                ->openUrlInNewTab()
+                ->button()
+                ->icon('heroicon-o-link');
+        }
+
+        return [
+            Action::make('refreshJsonFeed')
+                ->label('Refresh JSON feed')
+                ->action(function () {
+                    Artisan::call('channable:create-json-feeds');
+
+                    Notification::make()
+                        ->title('De JSON feed is vernieuwd')
+                        ->success()
+                        ->send();
+                })
+                ->icon('heroicon-o-arrow-path')
+                ->color('primary'),
+            ActionGroup::make($jsonFeedActions)
+                ->button()
+                ->icon('heroicon-o-eye')
+                ->label('Open JSON feed'),
         ];
     }
 }

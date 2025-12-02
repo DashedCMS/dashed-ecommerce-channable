@@ -133,7 +133,7 @@ class ChannableProductResource extends JsonResource
         ];
 
         // 8) Extra images als image_link_2..n
-        if (!empty($images)) {
+        if (! empty($images)) {
             foreach (array_values(array_slice($images, 1)) as $idx => $url) {
                 $array['image_link_' . ($idx + 2)] = $url;
             }
