@@ -38,6 +38,6 @@ class CreateJSONFeedsCommand extends Command
      */
     public function handle()
     {
-        CreateJSONFeedsJob::dispatch()->onQueue('ecommerce');
+        CreateJSONFeedsJob::dispatchSync();
     }
 }
