@@ -2,9 +2,12 @@
 
 namespace Dashed\DashedEcommerceChannable\Resources;
 
-use Dashed\DashedEcommerceCore\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Dashed\DashedEcommerceCore\Models\Product;
 
+/**
+ * @mixin \Dashed\DashedEcommerceCore\Models\Product
+ */
 class ChannableProductResource extends JsonResource
 {
     /**
@@ -15,97 +18,120 @@ class ChannableProductResource extends JsonResource
      *   productFilters (met pivot), productCharacteristics.productCharacteristic,
      *   productGroup.productCharacteristics.productCharacteristic.
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
-        $product = Product::find($this->id);
+        /** @var Product $product */
+        $product = $this->resource;
 
+        // 1) Categories
         $categories = $product->productCategories
             ? $product->productCategories->pluck('name')->values()->all()
             : [];
 
+        // 2) Filters + actieve optie bepalen
         $filters = $product->productGroup?->simpleFilters() ?? [];
+        $productFilters = $product->relationLoaded('productFilters')
+            ? $product->productFilters
+            : collect();
+
         foreach ($filters as &$filter) {
-            $productFilterResult = $product->productFilters()->where('product_filter_id', $filter['id'])->first();
+            $filterId = $filter['id'] ?? null;
+
+            if (! $filterId) {
+                continue;
+            }
+
+            $productFilterResult = $productFilters->firstWhere('product_filter_id', $filterId);
+
             if ($productFilterResult) {
                 $filter['active'] = $productFilterResult->pivot->product_filter_option_id ?? null;
             } elseif (count($filter['options'] ?? []) === 1) {
                 $filter['active'] = $filter['options'][0]['id'];
             }
         }
-        unset($filter); // break reference
+        unset($filter);
 
-        // 3) Images (één keer bepalen, geen unset-truc)
+        // 3) Images
         $images = $product->originalImagesToShow;
         if (empty($images) && $product->productGroup) {
-            $images = $product->productGroup->originalImagesToShow;
+            $images = $product->productGroup->originalImagesToShow ?? [];
         }
         $imageLink = $images[0] ?? null;
 
-        // 4) Stock/availability (snelle velden, met fallback)
-        $stock = $product->total_stock ?? null;
-        $availability = $product->in_stock ?? null;
+        // 4) Stock / availability
+        $stock = $product->total_stock;
+        $availability = $product->in_stock;
+
         if ($stock === null || $availability === null) {
             $stock = $product->directSellableStock();
             $availability = $stock > 0;
         }
 
-        // 5) Descriptions met bestaande replaceContentVariables signature
+        // 5) Descriptions
         $description = null;
         $shortDescription = null;
 
-        if (isset($product) && $product && $product->description) {
+        if ($product->description) {
             $description = $product->replaceContentVariables($product->description, $filters);
-        } elseif ($product->productGroup) {
-            $description = $product->productGroup->replaceContentVariables($product->productGroup->description, $filters, $product);
+        } elseif ($product->productGroup && $product->productGroup->description) {
+            $description = $product->productGroup->replaceContentVariables(
+                $product->productGroup->description,
+                $filters,
+                $product
+            );
         }
 
-        if (isset($product) && $product && $product->short_description) {
+        if ($product->short_description) {
             $shortDescription = $product->replaceContentVariables($product->short_description, $filters);
-        } elseif ($product->productGroup) {
-            $shortDescription = $product->productGroup->replaceContentVariables($product->productGroup->short_description, $filters, $product);
+        } elseif ($product->productGroup && $product->productGroup->short_description) {
+            $shortDescription = $product->productGroup->replaceContentVariables(
+                $product->productGroup->short_description,
+                $filters,
+                $product
+            );
         }
 
+        // 6) Characteristics map
         $characteristicsMap = [];
 
+        // Filters als kenmerken
         if ($product->productGroup && $product->productGroup->relationLoaded('activeProductFilters')) {
             foreach ($product->productGroup->activeProductFilters as $filterModel) {
                 $value = '';
                 $activeId = null;
+
                 foreach ($filters as $f) {
                     if (($f['id'] ?? null) === $filterModel->id) {
                         $activeId = $f['active'] ?? null;
-
                         break;
                     }
                 }
+
                 if ($activeId) {
                     $opt = $filterModel->productFilterOptions->firstWhere('id', $activeId);
                     if ($opt) {
                         $value = $opt->name ?? 'onbekend';
                     }
                 }
+
                 $characteristicsMap[$filterModel->name] = $value;
             }
         }
 
-
+        // Group characteristics
         if ($product->productGroup) {
             foreach ($product->productGroup->allCharacteristicsWithoutFilters() as $gc) {
-                if ($gc['value']) {
+                if (! empty($gc['value'])) {
                     $characteristicsMap[$gc['name']] = $gc['value'];
                 }
             }
         }
 
+        // Product characteristics (product > group, product wint)
         foreach ($product->allCharacteristics() as $gc) {
-            if ($gc['value']) {
+            if (! empty($gc['value'])) {
                 $characteristicsMap[$gc['name']] = $gc['value'];
             }
-            //        }
-            //        foreach ($product->allCharacteristics() as $gc) {
-            //            if($gc['value']){
-            //                $characteristicsMap[$gc['name']] = $gc['value'];
-            //            }
         }
 
         // 7) Basis payload
@@ -116,7 +142,7 @@ class ChannableProductResource extends JsonResource
             'link' => url($product->getUrl()),
             'price' => $product->currentPrice,
             'sale_price' => $product->discountPrice,
-            'availability' => (bool)$availability,
+            'availability' => (bool) $availability,
             'stock' => $stock,
             'description' => $description,
             'short_description' => $shortDescription,
