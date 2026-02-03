@@ -2,8 +2,8 @@
 
 namespace Dashed\DashedEcommerceChannable\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use Dashed\DashedEcommerceCore\Models\Product;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin \Dashed\DashedEcommerceCore\Models\Product
@@ -103,6 +103,7 @@ class ChannableProductResource extends JsonResource
                 foreach ($filters as $f) {
                     if (($f['id'] ?? null) === $filterModel->id) {
                         $activeId = $f['active'] ?? null;
+
                         break;
                     }
                 }

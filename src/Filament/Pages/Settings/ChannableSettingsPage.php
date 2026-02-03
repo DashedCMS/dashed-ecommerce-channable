@@ -2,14 +2,15 @@
 
 namespace Dashed\DashedEcommerceChannable\Filament\Pages\Settings;
 
-use Dashed\DashedCore\Classes\Locales;
-use Filament\Actions\ActionGroup;
+use Dashed\DashedEcommerceChannable\Jobs\CreateJSONFeedsJob;
 use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Schemas\Schema;
+use Filament\Actions\ActionGroup;
 use Dashed\DashedCore\Classes\Sites;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Tabs;
+use Dashed\DashedCore\Classes\Locales;
 use Illuminate\Support\Facades\Artisan;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -57,7 +58,7 @@ class ChannableSettingsPage extends Page
                         'default' => 1,
                         'lg' => 2,
                     ]),
-                TextEntry::make("Channable is " . (!Customsetting::get('channable_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
+                TextEntry::make("Channable is " . (! Customsetting::get('channable_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
                     ->state(Customsetting::get('channable_connection_error', $site['id'], ''))
                     ->columnSpan([
                         'default' => 1,
@@ -121,7 +122,7 @@ class ChannableSettingsPage extends Page
     {
         $jsonFeedActions = [];
 
-        foreach(Locales::getLocales() as $locale) {
+        foreach (Locales::getLocales() as $locale) {
             $jsonFeedActions[] = Action::make("openJsonFeed_{$locale['id']}")
                 ->label(ucfirst($locale['name']))
                 ->url(route('dashed.channable-feed', ['locale' => $locale['id']]))
@@ -134,10 +135,10 @@ class ChannableSettingsPage extends Page
             Action::make('refreshJsonFeed')
                 ->label('Refresh JSON feed')
                 ->action(function () {
-                    Artisan::call('channable:create-json-feeds');
+                    CreateJSONFeedsJob::dispatch();
 
                     Notification::make()
-                        ->title('De JSON feed is vernieuwd')
+                        ->title('De JSON feed wordt op de achtergrond vernieuwd')
                         ->success()
                         ->send();
                 })

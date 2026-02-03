@@ -4,12 +4,12 @@ namespace Dashed\DashedEcommerceChannable\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Storage;
+use Dashed\DashedCore\Classes\Locales;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Dashed\DashedCore\Classes\Locales;
 use Dashed\DashedEcommerceCore\Models\Product;
 use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
 
