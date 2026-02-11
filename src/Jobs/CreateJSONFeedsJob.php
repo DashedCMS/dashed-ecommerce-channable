@@ -31,45 +31,52 @@ class CreateJSONFeedsJob implements ShouldQueue
     {
         foreach (Locales::getLocales() as $locale) {
             $localeId = $locale['id'] ?? $locale;
-
             App::setLocale($localeId);
 
-            // Start van de JSON array
-            $json = '[';
-            $isFirstItem = true;
+            $path = "channable-feeds/channable-feed-{$localeId}.json";
 
-            $query = Product::publicShowable()
+            // open stream naar storage (lokaal disk = ok)
+            $disk = Storage::disk('dashed');
+
+            // Maak leeg bestand + begin bracket
+            $disk->put($path, '[');
+
+            $first = true;
+
+            Product::publicShowable()
                 ->with([
                     'productCategories',
                     'productGroup',
                     'productGroup.activeProductFilters.productFilterOptions',
-                    'productFilters', // met pivot
+                    'productFilters',
                     'productCharacteristics.productCharacteristic',
                     'productGroup.productCharacteristics.productCharacteristic',
-                ]);
+                ])
+                ->orderBy('id')
+                ->chunkById(500, function ($products) use ($disk, $path, &$first) {
+                    $buffer = '';
 
-            $query->chunkById(500, function ($products) use (&$json, &$isFirstItem) {
-                foreach ($products as $product) {
-                    $resource = new ChannableProductResource($product);
-                    $itemArray = $resource->toArray(null);
+                    foreach ($products as $product) {
+                        $item = (new ChannableProductResource($product))->toArray(null);
 
-                    $itemJson = json_encode($itemArray, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                        $json = json_encode($item, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-                    if (! $isFirstItem) {
-                        $json .= ',';
+                        // comma handling
+                        if (! $first) {
+                            $buffer .= ',';
+                        } else {
+                            $first = false;
+                        }
+
+                        $buffer .= $json;
                     }
 
-                    $json .= $itemJson;
-                    $isFirstItem = false;
-                }
-            });
+                    // append chunk
+                    $disk->append($path, $buffer);
+                });
 
-            $json .= ']';
-
-            Storage::disk('dashed')->put(
-                "channable-feeds/channable-feed-{$localeId}.json",
-                $json
-            );
+            // sluit array af
+            $disk->append($path, ']');
         }
     }
 
