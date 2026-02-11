@@ -23,7 +23,7 @@ class ChannableController extends FrontendController
             return json_decode($contents, true);
 
             return json_encode(ChannableProductResource::collection(Product::publicShowable()->get()));
-            //            return json_encode(ChannableProductResource::collection(Product::publicShowable()->limit(100)->get()));
+            //            return json_encode(ProductFeedResource::collection(Product::publicShowable()->limit(100)->get()));
         } else {
             return json_encode([]);
         }
