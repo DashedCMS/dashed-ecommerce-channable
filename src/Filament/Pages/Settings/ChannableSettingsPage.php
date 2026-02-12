@@ -141,7 +141,7 @@ class ChannableSettingsPage extends Page
                         UpdateProductInformationJob::dispatch($productGroup, false)->onQueue('ecommerce');
                     }
 
-                    CreateJSONFeedsJob::dispatch();
+                    CreateJSONFeedsJob::dispatch()->onQueue('ecommerce');
 
                     Notification::make()
                         ->title('De JSON feed wordt op de achtergrond vernieuwd')
