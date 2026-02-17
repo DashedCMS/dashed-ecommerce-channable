@@ -137,6 +137,18 @@ class ChannableSettingsPage extends Page
             Action::make('refreshJsonFeed')
                 ->label('Refresh JSON feed')
                 ->action(function () {
+                    CreateJSONFeedsJob::dispatch()->onQueue('ecommerce');
+
+                    Notification::make()
+                        ->title('De JSON feed wordt op de achtergrond vernieuwd')
+                        ->success()
+                        ->send();
+                })
+                ->icon('heroicon-o-arrow-path')
+                ->color('primary'),
+            Action::make('refreshJsonFeedWithProducts')
+                ->label('Refresh JSON feed met producten')
+                ->action(function () {
                     foreach (ProductGroup::all() as $productGroup) {
                         UpdateProductInformationJob::dispatch($productGroup, false)->onQueue('ecommerce');
                     }
