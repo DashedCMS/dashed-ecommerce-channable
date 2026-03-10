@@ -2,9 +2,6 @@
 
 namespace Dashed\DashedEcommerceChannable\Filament\Pages\Settings;
 
-use Dashed\DashedEcommerceChannable\Jobs\CreateJSONFeedsJob;
-use Dashed\DashedEcommerceCore\Jobs\UpdateProductInformationJob;
-use Dashed\DashedEcommerceCore\Models\ProductGroup;
 use Filament\Pages\Page;
 use Filament\Actions\Action;
 use Filament\Schemas\Schema;
@@ -13,13 +10,15 @@ use Dashed\DashedCore\Classes\Sites;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Tabs;
 use Dashed\DashedCore\Classes\Locales;
-use Illuminate\Support\Facades\Artisan;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Tabs\Tab;
 use Dashed\DashedCore\Models\Customsetting;
 use Filament\Infolists\Components\TextEntry;
+use Dashed\DashedEcommerceCore\Models\ProductGroup;
 use Dashed\DashedEcommerceChannable\Classes\Channable;
+use Dashed\DashedEcommerceChannable\Jobs\CreateJSONFeedsJob;
+use Dashed\DashedEcommerceCore\Jobs\UpdateProductInformationJob;
 
 class ChannableSettingsPage extends Page
 {
@@ -60,7 +59,7 @@ class ChannableSettingsPage extends Page
                         'default' => 1,
                         'lg' => 2,
                     ]),
-                TextEntry::make("Channable is " . (!Customsetting::get('channable_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
+                TextEntry::make("Channable is " . (! Customsetting::get('channable_connected', $site['id'], 0) ? 'niet' : '') . ' geconnect')
                     ->state(Customsetting::get('channable_connection_error', $site['id'], ''))
                     ->columnSpan([
                         'default' => 1,

@@ -2,17 +2,15 @@
 
 namespace Dashed\DashedEcommerceChannable\Jobs;
 
+use Dashed\DashedEcommerceCore\Models\Product;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 use Dashed\DashedCore\Classes\Locales;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Dashed\DashedEcommerceCore\Models\Product;
-use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
 
 class CreateJSONFeedsJob implements ShouldQueue
 {
@@ -41,6 +39,7 @@ class CreateJSONFeedsJob implements ShouldQueue
 
             DB::table('dashed__product_feed_data')
                 ->where('locale', $localeId)
+                ->whereIn('product_id', Product::all()->pluck('id'))
                 ->orderBy('product_id')
                 ->chunkById(1000, function ($rows) use ($disk, $path, &$first) {
                     $buffer = '';

@@ -7,10 +7,10 @@ use Dashed\DashedCore\Classes\Locales;
 use Illuminate\Support\Facades\Storage;
 use Dashed\DashedCore\Models\Customsetting;
 use Dashed\DashedEcommerceCore\Models\Product;
-use Dashed\DashedCore\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Controller;;
 use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
 
-class ChannableController extends FrontendController
+class ChannableController extends Controller
 {
     public function index($locale = null)
     {
