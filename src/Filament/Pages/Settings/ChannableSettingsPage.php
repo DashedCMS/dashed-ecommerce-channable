@@ -17,11 +17,14 @@ use Dashed\DashedCore\Models\Customsetting;
 use Filament\Infolists\Components\TextEntry;
 use Dashed\DashedEcommerceCore\Models\ProductGroup;
 use Dashed\DashedEcommerceChannable\Classes\Channable;
+use Dashed\DashedCore\Traits\HasSettingsPermission;
 use Dashed\DashedEcommerceChannable\Jobs\CreateJSONFeedsJob;
 use Dashed\DashedEcommerceCore\Jobs\UpdateProductInformationJob;
 
 class ChannableSettingsPage extends Page
 {
+    use HasSettingsPermission;
+
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'Channable';
 

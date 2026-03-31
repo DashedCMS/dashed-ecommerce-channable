@@ -2,7 +2,6 @@
 
 namespace Dashed\DashedEcommerceChannable\Jobs;
 
-use Dashed\DashedEcommerceCore\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\DB;
 use Dashed\DashedCore\Classes\Locales;
@@ -11,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Dashed\DashedEcommerceCore\Models\Product;
 
 class CreateJSONFeedsJob implements ShouldQueue
 {
@@ -28,23 +28,29 @@ class CreateJSONFeedsJob implements ShouldQueue
 
     public function handle(): void
     {
+        $disk = Storage::disk('dashed');
+        $productIds = Product::query()->pluck('id');
+
         foreach (Locales::getLocales() as $locale) {
             $localeId = $locale['id'] ?? $locale;
-
             $path = "channable-feeds/channable-feed-{$localeId}.json";
-            $disk = Storage::disk('dashed');
 
             $disk->put($path, '[');
+
             $first = true;
 
             DB::table('dashed__product_feed_data')
                 ->where('locale', $localeId)
-                ->whereIn('product_id', Product::all()->pluck('id'))
+                ->whereIn('product_id', $productIds)
                 ->orderBy('product_id')
                 ->chunkById(1000, function ($rows) use ($disk, $path, &$first) {
                     $buffer = '';
 
                     foreach ($rows as $row) {
+                        if (empty($row->payload)) {
+                            continue;
+                        }
+
                         if (! $first) {
                             $buffer .= ',';
                         } else {
@@ -54,10 +60,12 @@ class CreateJSONFeedsJob implements ShouldQueue
                         $buffer .= $row->payload;
                     }
 
-                    $disk->append($path, $buffer);
+                    if ($buffer !== '') {
+                        $disk->append($path, $buffer, '');
+                    }
                 }, 'product_id');
 
-            $disk->append($path, ']');
+            $disk->append($path, ']', '');
         }
     }
 

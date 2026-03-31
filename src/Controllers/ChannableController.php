@@ -3,11 +3,13 @@
 namespace Dashed\DashedEcommerceChannable\Controllers;
 
 use Illuminate\Support\Facades\App;
+use App\Http\Controllers\Controller;
 use Dashed\DashedCore\Classes\Locales;
 use Illuminate\Support\Facades\Storage;
 use Dashed\DashedCore\Models\Customsetting;
 use Dashed\DashedEcommerceCore\Models\Product;
-use App\Http\Controllers\Controller;;
+
+;
 use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
 
 class ChannableController extends Controller
