@@ -4,8 +4,11 @@ namespace Dashed\DashedEcommerceChannable;
 
 use Spatie\LaravelPackageTools\Package;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Event;
 use Dashed\DashedEcommerceCore\Models\Order;
+use Dashed\DashedEcommerceCore\Events\Products\ProductInformationUpdatedEvent;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Dashed\DashedEcommerceChannable\Jobs\CreateJSONFeedsJob;
 use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
 use Dashed\DashedEcommerceChannable\Commands\CreateJSONFeedsCommand;
 use Dashed\DashedEcommerceChannable\Commands\SyncStockFromChannableCommand;
@@ -27,6 +30,10 @@ class DashedEcommerceChannableServiceProvider extends PackageServiceProvider
 
         Order::addDynamicRelation('channableOrder', function (Order $model) {
             return $model->hasOne(ChannableOrder::class);
+        });
+
+        Event::listen(ProductInformationUpdatedEvent::class, function () {
+            CreateJSONFeedsJob::dispatch();
         });
     }
 
