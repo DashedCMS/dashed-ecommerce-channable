@@ -98,6 +98,16 @@ MARKDOWN,
 
         cms()->registerSettingsPage(ChannableSettingsPage::class, 'Channable', 'archive-box', 'Koppel Channable');
 
+        cms()->registerIntegration([
+            'slug' => 'channable',
+            'label' => 'Channable',
+            'icon' => 'heroicon-o-rectangle-stack',
+            'category' => 'marketplace',
+            'settings_page' => ChannableSettingsPage::class,
+            'health_check' => fn (?string $siteId = null) => \Dashed\DashedCore\Integrations\IntegrationHealth::fromSettings(['channable_api_key', 'channable_company_id'], $siteId, 'API key of company ID ontbreekt'),
+            'package' => 'dashed-ecommerce-channable',
+        ]);
+
         $package
             ->name('dashed-ecommerce-channable')
 //            ->hasViews()
