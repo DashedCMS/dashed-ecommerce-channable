@@ -69,20 +69,20 @@ class ChannableSettingsPage extends Page
                         'lg' => 2,
                     ]),
                 TextInput::make("channable_api_key_{$site['id']}")
-                    ->label('Channable API key')
+                    ->label(__('Channable API key'))
                     ->maxLength(255),
                 TextInput::make("channable_company_id_{$site['id']}")
-                    ->label('Channable company ID')
+                    ->label(__('Channable company ID'))
                     ->maxLength(255),
                 TextInput::make("channable_project_id_{$site['id']}")
-                    ->label('Channable project ID')
+                    ->label(__('Channable project ID'))
                     ->maxLength(255),
                 Toggle::make("channable_feed_enabled_{$site['id']}")
-                    ->label('Channable feed aanzetten'),
+                    ->label(__('Channable feed aanzetten')),
                 Toggle::make("channable_order_sync_enabled_{$site['id']}")
-                    ->label('Order uit Channable naar webshop syncen'),
+                    ->label(__('Order uit Channable naar webshop syncen')),
                 Toggle::make("channable_stock_sync_enabled_{$site['id']}")
-                    ->label('Voorraad vanuit webshop naar Channable syncen'),
+                    ->label(__('Voorraad vanuit webshop naar Channable syncen')),
             ];
 
             $tabs[] = Tab::make($site['id'])
@@ -115,7 +115,7 @@ class ChannableSettingsPage extends Page
         }
 
         Notification::make()
-            ->title('De Channable instellingen zijn opgeslagen')
+            ->title(__('De Channable instellingen zijn opgeslagen'))
             ->success()
             ->send();
 
@@ -137,19 +137,19 @@ class ChannableSettingsPage extends Page
 
         return [
             Action::make('refreshJsonFeed')
-                ->label('Refresh JSON feed')
+                ->label(__('Refresh JSON feed'))
                 ->action(function () {
                     CreateJSONFeedsJob::dispatch()->onQueue('ecommerce');
 
                     Notification::make()
-                        ->title('De JSON feed wordt op de achtergrond vernieuwd')
+                        ->title(__('De JSON feed wordt op de achtergrond vernieuwd'))
                         ->success()
                         ->send();
                 })
                 ->icon('heroicon-o-arrow-path')
                 ->color('primary'),
             Action::make('refreshJsonFeedWithProducts')
-                ->label('Refresh JSON feed met producten')
+                ->label(__('Refresh JSON feed met producten'))
                 ->action(function () {
                     foreach (ProductGroup::all() as $productGroup) {
                         UpdateProductInformationJob::dispatch($productGroup, false)->onQueue('ecommerce');
@@ -158,7 +158,7 @@ class ChannableSettingsPage extends Page
                     CreateJSONFeedsJob::dispatch()->onQueue('ecommerce');
 
                     Notification::make()
-                        ->title('De JSON feed wordt op de achtergrond vernieuwd')
+                        ->title(__('De JSON feed wordt op de achtergrond vernieuwd'))
                         ->success()
                         ->send();
                 })
@@ -167,7 +167,7 @@ class ChannableSettingsPage extends Page
             ActionGroup::make($jsonFeedActions)
                 ->button()
                 ->icon('heroicon-o-eye')
-                ->label('Open JSON feed'),
+                ->label(__('Open JSON feed')),
         ];
     }
 }
