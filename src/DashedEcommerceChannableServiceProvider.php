@@ -112,6 +112,7 @@ MARKDOWN,
 
         $package
             ->name('dashed-ecommerce-channable')
+            ->hasTranslations()
 //            ->hasViews()
             ->hasRoutes([
                 'channableRoutes',
