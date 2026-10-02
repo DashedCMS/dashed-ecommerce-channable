@@ -1,1 +1,15 @@
-{}
+{
+    "Channable": "Channable",
+    "Channable API key": "Channable API key",
+    "Channable company ID": "Channable company ID",
+    "Channable feed aanzetten": "Enable Channable feed",
+    "Channable project ID": "Channable project ID",
+    "De Channable instellingen zijn opgeslagen": "The Channable settings have been saved",
+    "De JSON feed wordt op de achtergrond vernieuwd": "The JSON feed is being refreshed in the background",
+    "Koppel Channable": "Connect Channable",
+    "Open JSON feed": "Open JSON feed",
+    "Order uit Channable naar webshop syncen": "Sync order from Channable to webshop",
+    "Refresh JSON feed": "Refresh JSON feed",
+    "Refresh JSON feed met producten": "Refresh JSON feed with products",
+    "Voorraad vanuit webshop naar Channable syncen": "Sync stock from webshop to Channable"
+}
