@@ -23,6 +23,7 @@ use Dashed\DashedEcommerceCore\Jobs\UpdateProductInformationJob;
 
 class ChannableSettingsPage extends Page
 {
+    use \Dashed\DashedCore\Filament\Concerns\TranslatesPageLabels;
     use HasSettingsPermission;
 
     protected static bool $shouldRegisterNavigation = false;
