@@ -12,7 +12,7 @@ class CreateJSONFeedsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'channable:create-json-feeds';
+    protected $signature = 'channable:create-json-feeds {--force : Write the feeds even when nothing changed}';
 
     /**
      * The console command description.
@@ -38,6 +38,6 @@ class CreateJSONFeedsCommand extends Command
      */
     public function handle()
     {
-        CreateJSONFeedsJob::dispatchSync();
+        CreateJSONFeedsJob::dispatchSync((bool) $this->option('force'));
     }
 }

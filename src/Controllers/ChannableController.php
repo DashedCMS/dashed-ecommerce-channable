@@ -7,27 +7,38 @@ use App\Http\Controllers\Controller;
 use Dashed\DashedCore\Classes\Locales;
 use Illuminate\Support\Facades\Storage;
 use Dashed\DashedCore\Models\Customsetting;
-use Dashed\DashedEcommerceCore\Models\Product;
-
-;
-use Dashed\DashedEcommerceChannable\Resources\ChannableProductResource;
+use Symfony\Component\HttpFoundation\Response;
 
 class ChannableController extends Controller
 {
-    public function index($locale = null)
+    public function index($locale = null): Response
     {
-        if (Customsetting::get('channable_feed_enabled') == 1) {
-            $locale = Locales::getLocale($locale);
-            App::setLocale($locale['id']);
-
-            $contents = Storage::disk('dashed')->get('/channable-feeds/channable-feed-' . $locale['id'] . '.json');
-
-            return json_decode($contents, true);
-
-            return json_encode(ChannableProductResource::collection(Product::publicShowable()->get()));
-            //            return json_encode(ProductFeedResource::collection(Product::publicShowable()->limit(100)->get()));
-        } else {
-            return json_encode([]);
+        if (Customsetting::get('channable_feed_enabled') != 1) {
+            return response()->json([]);
         }
+
+        $locale = Locales::getLocale($locale);
+        App::setLocale($locale['id']);
+
+        $disk = Storage::disk('dashed');
+        $path = '/channable-feeds/channable-feed-' . $locale['id'] . '.json';
+
+        $stream = rescue(fn () => $disk->readStream($path), null, false);
+
+        if (! is_resource($stream)) {
+            return response()->json([]);
+        }
+
+        return response()->stream(function () use ($stream) {
+            try {
+                fpassthru($stream);
+            } finally {
+                if (is_resource($stream)) {
+                    fclose($stream);
+                }
+            }
+        }, 200, [
+            'Content-Type' => 'application/json',
+        ]);
     }
 }

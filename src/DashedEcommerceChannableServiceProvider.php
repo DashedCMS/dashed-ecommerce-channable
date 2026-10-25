@@ -39,7 +39,7 @@ class DashedEcommerceChannableServiceProvider extends PackageServiceProvider
             match (FeedProgress::groupDone()) {
                 'last' => CreateJSONFeedsJob::dispatch(true)->onQueue('ecommerce'),
                 'counted' => null,
-                default => CreateJSONFeedsJob::dispatch(),
+                default => CreateJSONFeedsJob::dispatchDebounced(),
             };
         });
 

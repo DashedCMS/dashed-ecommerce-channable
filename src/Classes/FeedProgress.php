@@ -63,6 +63,26 @@ class FeedProgress
         });
     }
 
+    /**
+     * Lets a feed job take over a queued run from the settings page. Only one
+     * job wins, so a parallel rebuild never reports into the same progress.
+     */
+    public static function claim(): bool
+    {
+        return Cache::lock(self::CACHE_KEY . '-lock', 10)->block(5, function () {
+            $progress = self::get();
+
+            if (($progress['status'] ?? null) !== 'queued' || self::isStale($progress)) {
+                return false;
+            }
+
+            $progress['status'] = 'running';
+            self::put($progress);
+
+            return true;
+        });
+    }
+
     public static function running(int $rowsTotal): void
     {
         self::update([
@@ -101,6 +121,13 @@ class FeedProgress
             'error' => $message,
             'finished_at' => now()->toIso8601String(),
         ]);
+    }
+
+    public static function failedIfRunning(string $message): void
+    {
+        if ((self::get()['status'] ?? null) === 'running') {
+            self::failed($message);
+        }
     }
 
     public static function isActive(?array $progress = null): bool
