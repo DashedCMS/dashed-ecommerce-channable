@@ -11,6 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Dashed\DashedEcommerceCore\Models\Product;
+use Dashed\DashedEcommerceChannable\Classes\FeedProgress;
 
 class CreateJSONFeedsJob implements ShouldQueue
 {
@@ -22,7 +23,7 @@ class CreateJSONFeedsJob implements ShouldQueue
     public int $timeout = 6000;
     public int $tries = 10;
 
-    public function __construct()
+    public function __construct(public bool $trackProgress = false)
     {
     }
 
@@ -30,6 +31,14 @@ class CreateJSONFeedsJob implements ShouldQueue
     {
         $disk = Storage::disk('dashed');
         $productIds = Product::query()->pluck('id');
+        $locales = collect(Locales::getLocales())->map(fn ($locale) => $locale['id'] ?? $locale);
+
+        if ($this->trackProgress) {
+            FeedProgress::running(DB::table('dashed__product_feed_data')
+                ->whereIn('locale', $locales)
+                ->whereIn('product_id', $productIds)
+                ->count());
+        }
 
         foreach (Locales::getLocales() as $locale) {
             $localeId = $locale['id'] ?? $locale;
@@ -63,9 +72,17 @@ class CreateJSONFeedsJob implements ShouldQueue
                     if ($buffer !== '') {
                         $disk->append($path, $buffer, '');
                     }
+
+                    if ($this->trackProgress) {
+                        FeedProgress::advance($rows->count());
+                    }
                 }, 'product_id');
 
             $disk->append($path, ']', '');
+        }
+
+        if ($this->trackProgress) {
+            FeedProgress::done();
         }
     }
 
@@ -75,5 +92,9 @@ class CreateJSONFeedsJob implements ShouldQueue
             'message' => $exception->getMessage(),
             'trace' => $exception->getTraceAsString(),
         ]);
+
+        if ($this->trackProgress) {
+            FeedProgress::failed($exception->getMessage());
+        }
     }
 }

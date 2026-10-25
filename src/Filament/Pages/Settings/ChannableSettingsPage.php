@@ -9,7 +9,9 @@ use Filament\Actions\ActionGroup;
 use Dashed\DashedCore\Classes\Sites;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Tabs;
+use Illuminate\Support\Facades\Cache;
 use Dashed\DashedCore\Classes\Locales;
+use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Tabs\Tab;
@@ -18,6 +20,7 @@ use Filament\Infolists\Components\TextEntry;
 use Dashed\DashedCore\Traits\HasSettingsPermission;
 use Dashed\DashedEcommerceCore\Models\ProductGroup;
 use Dashed\DashedEcommerceChannable\Classes\Channable;
+use Dashed\DashedEcommerceChannable\Classes\FeedProgress;
 use Dashed\DashedEcommerceChannable\Jobs\CreateJSONFeedsJob;
 use Dashed\DashedEcommerceCore\Jobs\UpdateProductInformationJob;
 
@@ -29,7 +32,7 @@ class ChannableSettingsPage extends Page
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $title = 'Channable';
 
-    protected string $view = 'dashed-core::settings.pages.default-settings';
+    protected string $view = 'dashed-ecommerce-channable::settings-page';
     public array $data = [];
 
     public function mount(): void
@@ -123,6 +126,47 @@ class ChannableSettingsPage extends Page
         return redirect(ChannableSettingsPage::getUrl());
     }
 
+    public function getFeedProgress(): ?array
+    {
+        $progress = FeedProgress::get();
+
+        if (! $progress) {
+            return null;
+        }
+
+        return array_merge($progress, [
+            'active' => FeedProgress::isActive($progress),
+            'stale' => FeedProgress::isStale($progress),
+            'percentage' => FeedProgress::percentage($progress),
+        ]);
+    }
+
+    public function getFeedFiles(): array
+    {
+        // Cached briefly: the page polls while a feed is being written.
+        return Cache::remember('dashed-channable-feed-files', 30, function () {
+            $disk = Storage::disk('dashed');
+            $files = [];
+
+            foreach (Locales::getLocales() as $locale) {
+                $path = "channable-feeds/channable-feed-{$locale['id']}.json";
+
+                try {
+                    $updatedAt = $disk->exists($path) ? $disk->lastModified($path) : null;
+                } catch (\Throwable) {
+                    $updatedAt = null;
+                }
+
+                $files[] = [
+                    'locale' => ucfirst($locale['name']),
+                    'updated_at' => $updatedAt,
+                ];
+            }
+
+            return $files;
+        });
+    }
+
     protected function getActions(): array
     {
         $jsonFeedActions = [];
@@ -139,8 +183,10 @@ class ChannableSettingsPage extends Page
         return [
             Action::make('refreshJsonFeed')
                 ->label(__('Refresh JSON feed'))
+                ->disabled(fn () => FeedProgress::isActive())
                 ->action(function () {
-                    CreateJSONFeedsJob::dispatch()->onQueue('ecommerce');
+                    FeedProgress::queue();
+                    CreateJSONFeedsJob::dispatch(true)->onQueue('ecommerce');
 
                     Notification::make()
                         ->title(__('De JSON feed wordt op de achtergrond vernieuwd'))
@@ -151,12 +197,20 @@ class ChannableSettingsPage extends Page
                 ->color('primary'),
             Action::make('refreshJsonFeedWithProducts')
                 ->label(__('Refresh JSON feed met producten'))
+                ->disabled(fn () => FeedProgress::isActive())
                 ->action(function () {
-                    foreach (ProductGroup::all() as $productGroup) {
+                    $productGroups = ProductGroup::all();
+
+                    // The feed itself is written after the last product group, see the service provider.
+                    FeedProgress::startWithProducts($productGroups->count());
+
+                    foreach ($productGroups as $productGroup) {
                         UpdateProductInformationJob::dispatch($productGroup, false)->onQueue('ecommerce');
                     }
 
-                    CreateJSONFeedsJob::dispatch()->onQueue('ecommerce');
+                    if ($productGroups->isEmpty()) {
+                        CreateJSONFeedsJob::dispatch(true)->onQueue('ecommerce');
+                    }
 
                     Notification::make()
                         ->title(__('De JSON feed wordt op de achtergrond vernieuwd'))

@@ -6,10 +6,21 @@
     "Channable project ID": "Channable project ID",
     "De Channable instellingen zijn opgeslagen": "The Channable settings have been saved",
     "De JSON feed wordt op de achtergrond vernieuwd": "The JSON feed is being refreshed in the background",
+    "Feed schrijven: :done van :total regels": "Writing feed: :done of :total rows",
+    "Gestart :time": "Started :time",
+    "JSON feed": "JSON feed",
+    "Klaar": "Done",
     "Koppel Channable": "Connect Channable",
+    "Laatst geschreven": "Last written",
+    "Mislukt": "Failed",
+    "Nog geen feed vernieuwd vanaf deze pagina.": "No feed refreshed from this page yet.",
     "Open JSON feed": "Open JSON feed",
     "Order uit Channable naar webshop syncen": "Sync order from Channable to webshop",
+    "Productinformatie bijwerken: :done van :total productgroepen": "Updating product information: :done of :total product groups",
     "Refresh JSON feed": "Refresh JSON feed",
     "Refresh JSON feed met producten": "Refresh JSON feed with products",
-    "Voorraad vanuit webshop naar Channable syncen": "Sync stock from webshop to Channable"
+    "Vastgelopen: al :minutes minuten geen voortgang": "Stuck: no progress for :minutes minutes",
+    "Voorraad vanuit webshop naar Channable syncen": "Sync stock from webshop to Channable",
+    "Wacht in de wachtrij": "Waiting in the queue",
+    "klaar na :duration": "done after :duration"
 }

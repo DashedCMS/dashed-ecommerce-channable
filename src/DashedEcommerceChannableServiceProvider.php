@@ -7,6 +7,7 @@ use Spatie\LaravelPackageTools\Package;
 use Illuminate\Console\Scheduling\Schedule;
 use Dashed\DashedEcommerceCore\Models\Order;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Dashed\DashedEcommerceChannable\Classes\FeedProgress;
 use Dashed\DashedEcommerceChannable\Models\ChannableOrder;
 use Dashed\DashedEcommerceChannable\Jobs\CreateJSONFeedsJob;
 use Dashed\DashedEcommerceChannable\Commands\CreateJSONFeedsCommand;
@@ -33,7 +34,13 @@ class DashedEcommerceChannableServiceProvider extends PackageServiceProvider
         });
 
         Event::listen(ProductInformationUpdatedEvent::class, function () {
-            CreateJSONFeedsJob::dispatch();
+            // During a refresh with products from the settings page the feed
+            // is written once, after the last product group is done.
+            match (FeedProgress::groupDone()) {
+                'last' => CreateJSONFeedsJob::dispatch(true)->onQueue('ecommerce'),
+                'counted' => null,
+                default => CreateJSONFeedsJob::dispatch(),
+            };
         });
 
         cms()->registerSettingsDocs(
@@ -113,7 +120,7 @@ MARKDOWN,
         $package
             ->name('dashed-ecommerce-channable')
             ->hasTranslations()
-//            ->hasViews()
+            ->hasViews()
             ->hasRoutes([
                 'channableRoutes',
             ])
