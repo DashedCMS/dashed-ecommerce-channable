@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Dashed\DashedEcommerceChannable\Classes\FeedProgress;
+use Dashed\DashedEcommerceChannable\Classes\FeedExclusions;
 
 class CreateJSONFeedsJob implements ShouldQueue
 {
@@ -135,10 +136,12 @@ class CreateJSONFeedsJob implements ShouldQueue
 
     private function feedRows(array $locales)
     {
-        return DB::table('dashed__product_feed_data as feed')
+        $query = DB::table('dashed__product_feed_data as feed')
             ->join('dashed__products as product', 'product.id', '=', 'feed.product_id')
             ->whereNull('product.deleted_at')
             ->whereIn('feed.locale', $locales);
+
+        return FeedExclusions::apply($query, 'product.product_group_id');
     }
 
     public function failed(\Throwable $exception): void

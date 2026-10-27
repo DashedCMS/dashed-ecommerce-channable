@@ -233,7 +233,7 @@ class Channable
         $channableCompanyId = Customsetting::get('channable_company_id');
         $channableProjectId = Customsetting::get('channable_project_id');
         if ($channableApiKey && $channableCompanyId && $channableProjectId) {
-            Product::publicShowable()->chunk(50, function ($products) {
+            FeedExclusions::apply(Product::publicShowable())->chunk(50, function ($products) {
                 $channableApiKey = Customsetting::get('channable_api_key');
                 $channableCompanyId = Customsetting::get('channable_company_id');
                 $channableProjectId = Customsetting::get('channable_project_id');
