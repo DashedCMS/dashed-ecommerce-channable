@@ -39,7 +39,7 @@ class SyncStockFromChannableCommand extends Command
      */
     public function handle()
     {
-        if (Channable::isConnected() && Customsetting::get('channable_stock_sync_enabled', null, 0)) {
+        if (Customsetting::get('channable_stock_sync_enabled', null, 0) && Channable::isConnected()) {
             Channable::syncStock();
         }
     }

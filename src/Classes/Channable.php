@@ -17,6 +17,16 @@ class Channable
 {
     public const APIURL = 'https://api.channable.com/v1';
 
+    public static function orderSyncEnabled(): bool
+    {
+        return rescue(fn () => (bool) Customsetting::get('channable_order_sync_enabled', null, 0), true, false);
+    }
+
+    public static function stockSyncEnabled(): bool
+    {
+        return rescue(fn () => (bool) Customsetting::get('channable_stock_sync_enabled', null, 0), true, false);
+    }
+
     public static function isConnected($siteId = null)
     {
         if (! $siteId) {

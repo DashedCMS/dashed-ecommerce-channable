@@ -24,8 +24,14 @@ class DashedEcommerceChannableServiceProvider extends PackageServiceProvider
     {
         $this->app->booted(function () {
             $schedule = app(Schedule::class);
-            $schedule->command(SyncOrdersFromChannableCommand::class)->everyFifteenMinutes();
-            $schedule->command(SyncStockFromChannableCommand::class)->everyFifteenMinutes();
+            $schedule->command(SyncOrdersFromChannableCommand::class)
+                ->everyFifteenMinutes()
+                ->when(fn () => \Dashed\DashedEcommerceChannable\Classes\Channable::orderSyncEnabled())
+                ->withoutOverlapping(15);
+            $schedule->command(SyncStockFromChannableCommand::class)
+                ->everyFifteenMinutes()
+                ->when(fn () => \Dashed\DashedEcommerceChannable\Classes\Channable::stockSyncEnabled())
+                ->withoutOverlapping(15);
             $schedule->command(CreateJSONFeedsCommand::class)->hourly();
         });
 

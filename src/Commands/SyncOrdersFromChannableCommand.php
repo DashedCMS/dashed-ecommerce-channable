@@ -40,7 +40,7 @@ class SyncOrdersFromChannableCommand extends Command
      */
     public function handle()
     {
-        if (Channable::isConnected() && Customsetting::get('channable_order_sync_enabled', null, 0)) {
+        if (Customsetting::get('channable_order_sync_enabled', null, 0) && Channable::isConnected()) {
             $orderDatas = Channable::getOrders();
             foreach ($orderDatas as $orderData) {
                 $channableOrder = ChannableOrder::where('channable_id', $orderData['id'])->first();
